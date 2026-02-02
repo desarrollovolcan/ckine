@@ -5,6 +5,7 @@ use App\Controllers\AuditController;
 use App\Controllers\AuthController;
 use App\Controllers\BoxesController;
 use App\Controllers\DashboardController;
+use App\Controllers\HomeController;
 use App\Controllers\PatientsController;
 use App\Controllers\PortalController;
 use App\Controllers\ProfessionalsController;
@@ -15,12 +16,13 @@ use App\Controllers\ServicesController;
 use App\Controllers\UsersController;
 use App\Middlewares\AuthMiddleware;
 
-$router->get('', [DashboardController::class, 'index'], [AuthMiddleware::class]);
-$router->get('login', [AuthController::class, 'showLogin']);
-$router->post('login', [AuthController::class, 'login']);
-$router->get('logout', [AuthController::class, 'logout'], [AuthMiddleware::class]);
-$router->get('password', [AuthController::class, 'showChangePassword'], [AuthMiddleware::class]);
-$router->post('password', [AuthController::class, 'changePassword'], [AuthMiddleware::class]);
+$router->get('', [HomeController::class, 'index']);
+$router->get('dashboard', [DashboardController::class, 'index'], [AuthMiddleware::class]);
+$router->get('auth/login', [AuthController::class, 'showLogin']);
+$router->post('auth/login', [AuthController::class, 'login']);
+$router->get('auth/logout', [AuthController::class, 'logout'], [AuthMiddleware::class]);
+$router->get('auth/password', [AuthController::class, 'showChangePassword'], [AuthMiddleware::class]);
+$router->post('auth/password', [AuthController::class, 'changePassword'], [AuthMiddleware::class]);
 
 $router->get('users', [UsersController::class, 'index'], [AuthMiddleware::class]);
 $router->get('users/create', [UsersController::class, 'create'], [AuthMiddleware::class]);

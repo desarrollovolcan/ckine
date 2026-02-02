@@ -3,7 +3,7 @@
 <?php if (!empty($errors['general'])): ?>
     <div class="alert alert-danger"><?php echo implode(', ', $errors['general']); ?></div>
 <?php endif; ?>
-<form method="post" action="/login">
+<form method="post" action="/auth/login">
     <input type="hidden" name="csrf_token" value="<?php echo CSRF::token(); ?>">
     <div class="mb-3">
         <label class="form-label">Email</label>

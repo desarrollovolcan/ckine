@@ -43,11 +43,11 @@ class AuthController extends Controller
         $audit->log($_SESSION['user_id'], 'login', 'auth', null, ['email' => $email]);
 
         if (!empty($_SESSION['must_change_password'])) {
-            $this->redirect('/password');
+            $this->redirect('/auth/password');
             return;
         }
 
-        $this->redirect('/');
+        $this->redirect('/dashboard');
     }
 
     public function showChangePassword(): void
@@ -76,7 +76,7 @@ class AuthController extends Controller
         $userModel = new User();
         $userModel->updatePassword((int) $_SESSION['user_id'], password_hash($password, PASSWORD_DEFAULT));
         $_SESSION['must_change_password'] = false;
-        $this->redirect('/');
+        $this->redirect('/dashboard');
     }
 
     public function logout(): void
@@ -84,6 +84,6 @@ class AuthController extends Controller
         $audit = new AuditLog();
         $audit->log($_SESSION['user_id'] ?? null, 'logout', 'auth', null, []);
         Auth::logout();
-        $this->redirect('/login');
+        $this->redirect('/auth/login');
     }
 }
