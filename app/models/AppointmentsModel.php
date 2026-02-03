@@ -54,22 +54,4 @@ class AppointmentsModel extends Model
             ]
         );
     }
-
-    public function upcomingForPatient(int $companyId, int $patientId, int $limit = 5): array
-    {
-        $limit = max(1, (int)$limit);
-        $sql = "SELECT a.*, pr.name AS professional_name, b.name AS box_name
-                FROM {$this->table} a
-                LEFT JOIN professionals pr ON pr.id = a.professional_id AND pr.company_id = a.company_id AND pr.deleted_at IS NULL
-                LEFT JOIN boxes b ON b.id = a.box_id AND b.company_id = a.company_id AND b.deleted_at IS NULL
-                WHERE a.company_id = :company_id AND a.patient_id = :patient_id AND a.deleted_at IS NULL
-                AND a.appointment_date >= :today
-                ORDER BY a.appointment_date ASC, a.appointment_time ASC
-                LIMIT {$limit}";
-        return $this->db->fetchAll($sql, [
-            'company_id' => $companyId,
-            'patient_id' => $patientId,
-            'today' => date('Y-m-d'),
-        ]);
-    }
 }
