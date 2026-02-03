@@ -6,12 +6,12 @@
                 <p class="mb-1 text-muted">ID</p>
                 <h6><?php echo e($patientId ?: 'No disponible'); ?></h6>
                 <p class="mb-1 text-muted mt-3">Nombre</p>
-                <h6>María López</h6>
+                <h6><?php echo e($patient['name'] ?? 'Sin nombre'); ?></h6>
                 <p class="mb-1 text-muted mt-3">Contacto</p>
-                <div>maria.lopez@example.com</div>
-                <div class="text-muted">+56 9 1234 5678</div>
+                <div><?php echo e($patient['email'] ?? 'Sin correo'); ?></div>
+                <div class="text-muted"><?php echo e($patient['phone'] ?? 'Sin teléfono'); ?></div>
                 <div class="mt-3">
-                    <span class="badge bg-success">Activo</span>
+                    <span class="badge bg-success"><?php echo e($patient['status'] ?? 'Sin estado'); ?></span>
                 </div>
             </div>
         </div>
@@ -22,9 +22,9 @@
                 <h5 class="card-title mb-3">Resumen clínico</h5>
                 <p class="text-muted">Resumen general del tratamiento y próximos hitos del paciente.</p>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Diagnóstico principal: Lesión de rodilla derecha</li>
-                    <li class="list-group-item">Plan: 8 sesiones de rehabilitación funcional</li>
-                    <li class="list-group-item">Próxima cita: 14/05/2024 - 09:30</li>
+                    <li class="list-group-item">RUT: <?php echo e($patient['rut'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Fecha de nacimiento: <?php echo e($patient['birthdate'] ? format_date($patient['birthdate']) : 'No informada'); ?></li>
+                    <li class="list-group-item">Observaciones: <?php echo e($patient['notes'] ?? 'Sin observaciones'); ?></li>
                 </ul>
                 <div class="mt-3 d-flex gap-2 justify-content-end">
                     <a href="index.php?route=patients/edit&id=<?php echo e($patientId); ?>" class="btn btn-outline-secondary">Editar ficha</a>
