@@ -1,17 +1,19 @@
 <?php
-$currentUser = Auth::user();
-$isAdmin = ($currentUser['role'] ?? '') === 'Admin';
+$logoColor = $companySettings['logo_color'] ?? 'assets/images/logo.png';
+$logoBlack = $companySettings['logo_black'] ?? 'assets/images/logo-black.png';
+$logoSmallColor = $companySettings['logo_color'] ?? 'assets/images/logo-sm.png';
+$logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
 ?>
 
 <div class="sidenav-menu">
-    <a href="/" class="logo">
+    <a href="index.php" class="logo">
         <span class="logo logo-light">
-            <span class="logo-lg"><img src="/assets/images/logo.png" alt="logo"></span>
-            <span class="logo-sm"><img src="/assets/images/logo-sm.png" alt="logo-sm"></span>
+            <span class="logo-lg"><img src="<?php echo e($logoColor); ?>" alt="logo"></span>
+            <span class="logo-sm"><img src="<?php echo e($logoSmallColor); ?>" alt="small logo"></span>
         </span>
         <span class="logo logo-dark">
-            <span class="logo-lg"><img src="/assets/images/logo-black.png" alt="logo"></span>
-            <span class="logo-sm"><img src="/assets/images/logo-sm.png" alt="logo-sm"></span>
+            <span class="logo-lg"><img src="<?php echo e($logoBlack); ?>" alt="dark logo"></span>
+            <span class="logo-sm"><img src="<?php echo e($logoSmallBlack); ?>" alt="small logo"></span>
         </span>
     </a>
     <button class="button-on-hover">
@@ -29,131 +31,41 @@ $isAdmin = ($currentUser['role'] ?? '') === 'Admin';
                 </div>
             </div>
         </div>
+        <?php
+        $isAdmin = ($currentUser['role'] ?? '') === 'admin';
+        $hasCompany = !empty($currentCompany['id']);
+        $hasPermission = static function (string $key) use ($permissions, $isAdmin): bool {
+            if ($isAdmin) {
+                return true;
+            }
+            if (in_array($key, $permissions ?? [], true)) {
+                return true;
+            }
+            $legacyKey = permission_legacy_key_for($key);
+            return $legacyKey ? in_array($legacyKey, $permissions ?? [], true) : false;
+        };
+        $canAccessAny = static function (array $keys) use ($hasPermission): bool {
+            foreach ($keys as $key) {
+                if ($hasPermission($key)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        ?>
         <ul class="side-nav">
-            <li class="side-nav-title mt-2">Centro Kinésico</li>
-            <li class="side-nav-item">
-                <a href="/" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="home"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Dashboard</span>
-                        <span class="menu-caption">Resumen diario</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="index.php?route=kinecico" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="layout-dashboard"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Panel Kinésico</span>
-                        <span class="menu-caption">Vista operativa</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/agenda" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="calendar"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Agenda</span>
-                        <span class="menu-caption">Citas y disponibilidad</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/pacientes" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="users"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Pacientes</span>
-                        <span class="menu-caption">Ficha y evolución</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/profesionales" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="stethoscope"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Profesionales</span>
-                        <span class="menu-caption">Equipo clínico</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/box" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="door-open"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Box</span>
-                        <span class="menu-caption">Salas y recursos</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/servicios" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Servicios</span>
-                        <span class="menu-caption">Prestaciones</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/fichas" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="file-text"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Fichas clínicas</span>
-                        <span class="menu-caption">Historial paciente</span>
-                    </span>
-                </a>
-            </li>
-            <li class="side-nav-item">
-                <a href="/reportes" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="bar-chart"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Reportes</span>
-                        <span class="menu-caption">Agenda y KPI</span>
-                    </span>
-                </a>
-            </li>
-            <?php if ($isAdmin): ?>
-                <li class="side-nav-title">Administración</li>
+            <li class="side-nav-title mt-2">Menú</li>
+            <?php if ($hasCompany && $hasPermission('dashboard_view')): ?>
                 <li class="side-nav-item">
-                    <a href="/usuarios" class="side-nav-link">
-                        <span class="menu-icon"><i data-lucide="user-cog"></i></span>
+                    <a href="index.php?route=dashboard" class="side-nav-link">
+                        <span class="menu-icon"><i data-lucide="circle-gauge"></i></span>
                         <span class="menu-label">
-                            <span class="menu-text">Usuarios</span>
-                            <span class="menu-caption">Roles y accesos</span>
-                        </span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="/roles" class="side-nav-link">
-                        <span class="menu-icon"><i data-lucide="shield"></i></span>
-                        <span class="menu-label">
-                            <span class="menu-text">Roles</span>
-                            <span class="menu-caption">Permisos</span>
-                        </span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="/auditoria" class="side-nav-link">
-                        <span class="menu-icon"><i data-lucide="activity"></i></span>
-                        <span class="menu-label">
-                            <span class="menu-text">Auditoría</span>
-                            <span class="menu-caption">Cambios críticos</span>
+                            <span class="menu-text">Dashboard</span>
+                            <span class="menu-caption">Visión general de indicadores</span>
                         </span>
                     </a>
                 </li>
             <?php endif; ?>
-<<<<<<< HEAD
-            <li class="side-nav-title">Portal</li>
-            <li class="side-nav-item">
-                <a href="/portal" class="side-nav-link">
-                    <span class="menu-icon"><i data-lucide="globe"></i></span>
-                    <span class="menu-label">
-                        <span class="menu-text">Agendamiento público</span>
-                        <span class="menu-caption">Self-service</span>
-                    </span>
-                </a>
-            </li>
-=======
             <?php if ($hasCompany && $canAccessAny(['products_view', 'products_edit', 'produced_products_view', 'produced_products_edit', 'product_families_view', 'product_subfamilies_view', 'production_view', 'production_edit'])): ?>
                 <li class="side-nav-title">Productos</li>
                 <li class="side-nav-item">
@@ -889,7 +801,39 @@ $isAdmin = ($currentUser['role'] ?? '') === 'Admin';
                     </div>
                 </li>
             <?php endif; ?>
->>>>>>> parent of cb58b5d (Add centro kinesico dashboard)
         </ul>
     </div>
 </div>
+
+<script>
+    (function () {
+        const currentRoute = new URLSearchParams(window.location.search).get('route') || 'dashboard';
+        const links = document.querySelectorAll('.side-nav-link[href*="route="]');
+        links.forEach((link) => {
+            let linkRoute = '';
+            try {
+                linkRoute = new URL(link.href, window.location.origin).searchParams.get('route') || '';
+            } catch (error) {
+                linkRoute = '';
+            }
+            if (!linkRoute) {
+                return;
+            }
+            const isActive = currentRoute === linkRoute || currentRoute.startsWith(`${linkRoute}/`);
+            if (!isActive) {
+                return;
+            }
+            link.classList.add('active');
+            link.closest('.side-nav-item')?.classList.add('active');
+            const collapse = link.closest('.collapse');
+            if (collapse) {
+                collapse.classList.add('show');
+                const toggle = collapse.previousElementSibling;
+                if (toggle && toggle.classList.contains('side-nav-link')) {
+                    toggle.classList.add('active');
+                    toggle.setAttribute('aria-expanded', 'true');
+                }
+            }
+        });
+    })();
+</script>

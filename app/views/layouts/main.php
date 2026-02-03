@@ -1,7 +1,7 @@
 <?php include __DIR__ . '/../../../partials/html.php'; ?>
 
 <head>
-    <?php $title = $title ?? 'Centro Kinésico'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
+    <?php $title = $title ?? 'GoCreative Ges'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
     <?php include __DIR__ . '/../../../partials/head-css.php'; ?>
 </head>
 
@@ -45,6 +45,7 @@
     </div>
 
     <?php include __DIR__ . '/../../../partials/footer-scripts.php'; ?>
+    <?php ?>
 </body>
 
 </html>
