@@ -1,48 +1,59 @@
-# GoCreative Ges
+# Centro Kinésico (PHP MVC + MySQL)
 
-Sistema minimalista para gestión de clientes, proyectos, servicios recurrentes, cobranzas y automatización de correos.
+Sistema web para gestión de un centro kinésico en Chile. Incluye portal de agendamiento, control de citas, ficha clínica, usuarios/roles, reportes y auditoría.
 
 ## Requisitos
 - PHP 8+
-- MySQL 5.7/8.0
-- Servidor web (Apache/Nginx)
+- MySQL 8+
+- Apache/Nginx apuntando a `/public`
 
 ## Instalación
 1. Clona el repositorio.
-2. Crea la base de datos e importa `bd/database.sql` (o `bd/database_full.sql` si quieres todas las actualizaciones aplicadas).
-3. Configura las credenciales en `app/config/config.php`.
-4. Apunta tu servidor web a la raíz del proyecto.
-5. Ingresa con:
-   - **Usuario:** eisla@gocreative.cl
-   - **Contraseña:** Ei1245.$
-
-## Configuración SMTP
-- Ingresar en **Configuración -> SMTP** y completar ambas cuentas (Cobranza e Información).
-- Las contraseñas se almacenan en la tabla `settings` como JSON.
-
-## Cron Jobs
-Ejecuta los jobs desde CLI:
+2. Crea la base de datos e importa `database/schema.sql`.
+3. Configura credenciales en `config/db.php` y `config/app.php`.
+4. Ejecuta migraciones:
 
 ```bash
-php cron/run.php check_expirations
-php cron/run.php generate_invoices
-php cron/run.php send_scheduled_emails
+php public/migrate.php
 ```
 
-Se recomienda configurar cron en el sistema operativo para ejecutarlos según necesidad.
+5. Carga datos iniciales:
 
-## Flujo recomendado
-1. Crear cliente.
-2. Crear servicio recurrente.
-3. Generar factura (manual o automática).
-4. Encolar correo desde Cola de correos.
-5. Ejecutar `send_scheduled_emails`.
-6. Registrar pago.
+```bash
+mysql -u root -p kinecico < database/seed.sql
+```
 
-## Seguridad
-- CSRF en formularios.
-- Passwords con `password_hash`.
-- Prepared statements en todas las consultas.
+## Credenciales iniciales
+- **Usuario:** admin@local
+- **Contraseña:** Admin123!
 
-## Logs
-- `storage/logs/app.log`
+> Al iniciar sesión se solicitará cambio de contraseña.
+
+## Estructura MVC
+```
+/public
+  index.php
+  migrate.php
+/app
+  /controllers
+  /models
+  /views
+  /core
+  /middlewares
+/config
+/database
+  /migrations
+  schema.sql
+```
+
+## Módulos principales
+- Auth + cambio de contraseña.
+- Usuarios, roles y permisos (RBAC básico).
+- Pacientes y ficha clínica (evaluación + evoluciones + adjuntos).
+- Profesionales, box y servicios.
+- Agenda con control de choques y estados.
+- Portal público de agendamiento.
+- Reportes básicos y auditoría.
+
+## Migraciones
+Los scripts de migración viven en `/database/migrations` y se registran en `schema_migrations`. El runner `public/migrate.php` aplica automáticamente las migraciones pendientes.
