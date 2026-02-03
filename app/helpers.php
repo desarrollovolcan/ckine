@@ -1047,6 +1047,9 @@ function can_access_route(Database $db, string $route, ?array $user): bool
         return true;
     }
     $roleId = (int)($user['role_id'] ?? 0);
+    if ($roleId === 0 && $route === 'dashboard') {
+        return true;
+    }
     if ($roleId === 0 && !empty($user['role'])) {
         $roleRow = $db->fetch('SELECT id FROM roles WHERE name = :name', ['name' => $user['role']]);
         $roleId = (int)($roleRow['id'] ?? 0);
