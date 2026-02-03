@@ -35,6 +35,7 @@ return [
     'appointments/store' => ['AppointmentsController', 'store'],
     'appointments/edit' => ['AppointmentsController', 'edit'],
     'appointments/update' => ['AppointmentsController', 'update'],
+    'appointments/waiting-room' => ['AppointmentsController', 'waitingRoom'],
     'appointments/delete' => ['AppointmentsController', 'delete'],
     'patient-portal' => ['PatientPortalController', 'index'],
     'patient-portal/update' => ['PatientPortalController', 'update'],

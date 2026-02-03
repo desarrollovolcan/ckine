@@ -279,6 +279,37 @@ class AppointmentsController extends Controller
         $this->redirect('index.php?route=appointments');
     }
 
+    public function waitingRoom(): void
+    {
+        $companyId = (int)($_GET['company_id'] ?? 0);
+        if ($companyId <= 0) {
+            $companyId = current_company_id() ?? 0;
+        }
+        $today = new DateTimeImmutable('today');
+        $todayLabel = $today->format('Y-m-d');
+        $appointments = [];
+        $company = null;
+
+        if ($companyId > 0) {
+            $appointments = $this->appointments->byDateRange(
+                $companyId,
+                $today->format('Y-m-d'),
+                $today->format('Y-m-d')
+            );
+            $company = $this->db->fetch('SELECT id, name FROM companies WHERE id = :id', ['id' => $companyId]);
+        }
+
+        $this->renderPublic('appointments/waiting-room', [
+            'title' => 'Sala de espera',
+            'pageTitle' => 'Sala de espera',
+            'company' => $company,
+            'appointments' => $appointments,
+            'todayLabel' => $todayLabel,
+            'missingCompany' => $companyId <= 0,
+            'hidePortalHeader' => true,
+        ]);
+    }
+
     public function delete(): void
     {
         $this->requireLogin();
