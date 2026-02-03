@@ -5,11 +5,37 @@ class KinecicoController extends Controller
     public function index(): void
     {
         $this->requireLogin();
-        $companyId = current_company_id();
-        if (!$companyId) {
-            flash('error', 'Selecciona una empresa.');
-            $this->redirect('index.php?route=auth/switch-company');
-        }
+
+        $today = new DateTimeImmutable('today');
+        $todayDate = $today->format('Y-m-d');
+        $appointmentModel = new AppointmentModel($this->db);
+
+        $todaySessions = array_map(function (array $session): array {
+            return [
+                'time' => (new DateTimeImmutable($session['start_at']))->format('H:i'),
+                'patient' => trim($session['first_name'] . ' ' . $session['last_name']),
+                'therapist' => trim($session['prof_name'] . ' ' . $session['prof_last']),
+                'service' => $session['service_name'],
+                'room' => $session['box_name'],
+                'status' => $session['status'],
+            ];
+        }, $appointmentModel->allWithRelations(['date' => $todayDate]));
+
+        $activePatients = (int)($this->db->fetch('SELECT COUNT(*) AS total FROM patients WHERE deleted_at IS NULL')['total'] ?? 0);
+        $plansCount = (int)($this->db->fetch('SELECT COUNT(*) AS total FROM patient_evaluations')['total'] ?? 0);
+
+        $startOfWeek = $today->modify('monday this week')->setTime(0, 0);
+        $endOfWeek = $startOfWeek->modify('+7 days');
+        $estimatedIncome = (float)($this->db->fetch(
+            'SELECT COALESCE(SUM(s.price), 0) AS total
+             FROM appointments a
+             INNER JOIN services s ON s.id = a.service_id
+             WHERE a.start_at >= :start_at AND a.start_at < :end_at',
+            [
+                'start_at' => $startOfWeek->format('Y-m-d H:i:s'),
+                'end_at' => $endOfWeek->format('Y-m-d H:i:s'),
+            ]
+        )['total'] ?? 0);
 
         $today = new DateTimeImmutable('today');
         $todayDate = $today->format('Y-m-d');
