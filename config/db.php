@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'host' => '127.0.0.1',
-    'name' => 'kinecico',
+    'host' => 'localhost',
+    'name' => 'ckine',
     'user' => 'root',
     'pass' => '',
     'charset' => 'utf8mb4',
