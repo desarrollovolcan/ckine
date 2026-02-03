@@ -9,6 +9,10 @@
                 <h6>Dra. Paula Fuentes</h6>
                 <p class="text-muted mb-1 mt-3">Especialidad</p>
                 <h6>Kinesiología deportiva</h6>
+                <p class="text-muted mb-1 mt-3">RUT</p>
+                <h6>12.345.678-9</h6>
+                <p class="text-muted mb-1 mt-3">Registro profesional</p>
+                <h6>KINE-2024-001</h6>
                 <div class="mt-3">
                     <span class="badge bg-success">Activo</span>
                 </div>
@@ -21,7 +25,10 @@
                 <h5 class="card-title mb-3">Agenda y disponibilidad</h5>
                 <p class="text-muted">Horario habitual: Lunes a viernes 08:00 - 16:00.</p>
                 <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Modalidad: Presencial</li>
                     <li class="list-group-item">Box asignado: Box 1</li>
+                    <li class="list-group-item">Correo: paula.fuentes@example.com</li>
+                    <li class="list-group-item">Teléfono: +56 9 2222 3344</li>
                     <li class="list-group-item">Próxima cita: 12/05/2024 - 09:00</li>
                     <li class="list-group-item">Sesiones de la semana: 18</li>
                 </ul>
