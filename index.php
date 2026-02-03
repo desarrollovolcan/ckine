@@ -12,6 +12,11 @@ if (!isset($routes[$route])) {
 
 if (Auth::check() && !can_access_route($db, $route, Auth::user())) {
     $_SESSION['error'] = 'No tienes permisos para acceder a esta sección.';
+    if ($route === 'dashboard') {
+        Auth::logout();
+        header('Location: login.php');
+        exit;
+    }
     header('Location: index.php?route=dashboard');
     exit;
 }
