@@ -63,4 +63,13 @@ class BoxesController extends Controller
             'boxId' => $boxId,
         ]);
     }
+
+    public function delete(): void
+    {
+        $this->requireLogin();
+        verify_csrf();
+        $boxId = (int)($_POST['id'] ?? 0);
+        flash('success', "Box {$boxId} eliminado correctamente (demo).");
+        $this->redirect('index.php?route=boxes');
+    }
 }

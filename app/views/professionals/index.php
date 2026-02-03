@@ -33,6 +33,11 @@
                             <td class="text-end">
                                 <a href="index.php?route=professionals/show&id=<?php echo e($professional['id']); ?>" class="btn btn-sm btn-outline-primary">Ver</a>
                                 <a href="index.php?route=professionals/edit&id=<?php echo e($professional['id']); ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <form method="post" action="index.php?route=professionals/delete" class="d-inline" onsubmit="return confirm('¿Eliminar este profesional?');">
+                                    <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                    <input type="hidden" name="id" value="<?php echo e($professional['id']); ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

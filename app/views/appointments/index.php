@@ -35,7 +35,14 @@
                             <td><?php echo e($appointment['box']); ?></td>
                             <td><span class="badge bg-light text-dark"><?php echo e($appointment['status']); ?></span></td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Reagendar</button>
+                                <div class="d-inline-flex gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Reagendar</button>
+                                    <form method="post" action="index.php?route=appointments/delete" onsubmit="return confirm('¿Eliminar esta cita?');">
+                                        <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                        <input type="hidden" name="id" value="<?php echo e($appointment['id']); ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

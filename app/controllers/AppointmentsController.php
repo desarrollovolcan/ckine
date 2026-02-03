@@ -42,4 +42,13 @@ class AppointmentsController extends Controller
         flash('success', 'Cita agendada correctamente (demo).');
         $this->redirect('index.php?route=appointments');
     }
+
+    public function delete(): void
+    {
+        $this->requireLogin();
+        verify_csrf();
+        $appointmentId = (int)($_POST['id'] ?? 0);
+        flash('success', "Cita {$appointmentId} eliminada correctamente (demo).");
+        $this->redirect('index.php?route=appointments');
+    }
 }
