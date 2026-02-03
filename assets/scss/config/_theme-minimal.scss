@@ -72,10 +72,10 @@ $theme-minimal-colors: (
             --#{$prefix}sidenav-bg:                       #{$white};
             --#{$prefix}sidenav-border-color:             #edf2f9;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
-            --#{$prefix}sidenav-item-hover-color:         #5a9eea;
-            --#{$prefix}sidenav-item-hover-bg:          #f7f7fb;
-            --#{$prefix}sidenav-item-active-color:        #5a9eea;
-            --#{$prefix}sidenav-item-active-bg:         #f7f7fb;
+            --#{$prefix}sidenav-item-hover-color:         #{$primary};
+            --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
+            --#{$prefix}sidenav-item-active-color:        #{$primary};
+            --#{$prefix}sidenav-item-active-bg:         #{$primary-bg-subtle};
         }
 
         // Background Gray left-sidebar
@@ -83,10 +83,10 @@ $theme-minimal-colors: (
             --#{$prefix}sidenav-bg:                       #f6f8fb;
             --#{$prefix}sidenav-border-color:             #e7e9eb;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
-            --#{$prefix}sidenav-item-hover-color:         #5a9eea;
-            --#{$prefix}sidenav-item-hover-bg:          #f1f0f5;
-            --#{$prefix}sidenav-item-active-color:        #212b29;
-            --#{$prefix}sidenav-item-active-bg:         #f1f0f5;
+            --#{$prefix}sidenav-item-hover-color:         #{$primary};
+            --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
+            --#{$prefix}sidenav-item-active-color:        #{$primary};
+            --#{$prefix}sidenav-item-active-bg:         #{$primary-bg-subtle};
         }
 
         // Dark Left Sidebar
@@ -139,7 +139,7 @@ $theme-minimal-colors: (
         &[data-topbar-color="light"] {
             --#{$prefix}topbar-bg:                      #ffffff;
             --#{$prefix}topbar-item-color:                #{$gray-700};
-            --#{$prefix}topbar-item-hover-color:          #5a9eea;
+            --#{$prefix}topbar-item-hover-color:          #{$primary};
             --#{$prefix}topbar-search-bg:                 transparent;
             --#{$prefix}topbar-search-border:           #e7e9eb;
         }
@@ -148,7 +148,7 @@ $theme-minimal-colors: (
         &[data-topbar-color="gray"] {
             --#{$prefix}topbar-bg:                      #f1f2f7;
             --#{$prefix}topbar-item-color:                #{$gray-700};
-            --#{$prefix}topbar-item-hover-color:          #5a9eea;
+            --#{$prefix}topbar-item-hover-color:          #{$primary};
             --#{$prefix}topbar-search-bg:               #e8e9ef;
             --#{$prefix}topbar-search-border:           #e8e9ef;
         }
