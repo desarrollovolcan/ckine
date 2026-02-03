@@ -507,6 +507,18 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                     </a>
                 </li>
             <?php endif; ?>
+            <?php if ($hasCompany): ?>
+                <li class="side-nav-title">Salud</li>
+                <li class="side-nav-item">
+                    <a href="index.php?route=kinecico" class="side-nav-link">
+                        <span class="menu-icon"><i data-lucide="heart-pulse"></i></span>
+                        <span class="menu-label">
+                            <span class="menu-text">Centro kinésico</span>
+                            <span class="menu-caption">Pacientes y sesiones</span>
+                        </span>
+                    </a>
+                </li>
+            <?php endif; ?>
             <?php if ($hasCompany && $hasPermission('projects_view')): ?>
                 <li class="side-nav-item">
                     <a href="index.php?route=projects" class="side-nav-link">
