@@ -90,17 +90,6 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                         </a>
                     </li>
                 <?php endif; ?>
-                <?php if ($hasPermission('services_view')): ?>
-                    <li class="side-nav-item">
-                        <a href="index.php?route=services" class="side-nav-link">
-                            <span class="menu-icon"><i data-lucide="briefcase"></i></span>
-                            <span class="menu-label">
-                                <span class="menu-text">Servicios</span>
-                                <span class="menu-caption">Prestaciones clínicas</span>
-                            </span>
-                        </a>
-                    </li>
-                <?php endif; ?>
                 <?php if ($hasPermission('appointments_view')): ?>
                     <li class="side-nav-item">
                         <a href="index.php?route=appointments/calendar" class="side-nav-link">
@@ -108,6 +97,15 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                             <span class="menu-label">
                                 <span class="menu-text">Agenda / Citas</span>
                                 <span class="menu-caption">Calendario clínico</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=appointments/waiting-room" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="monitor"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Sala de espera</span>
+                                <span class="menu-caption">Pantalla pública</span>
                             </span>
                         </a>
                     </li>
