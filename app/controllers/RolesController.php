@@ -1,102 +1,138 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Auth;
-use App\Core\Controller;
-use App\Core\CSRF;
-use App\Core\Request;
-use App\Core\Validator;
-use App\Models\AuditLog;
-use App\Models\Permission;
-use App\Models\Role;
-use App\Models\RolePermission;
 
 class RolesController extends Controller
 {
-    private function authorize(): void
+    private RolesModel $roles;
+
+    public function __construct(array $config, Database $db)
     {
-        if (!Auth::hasPermission('roles.manage')) {
-            http_response_code(403);
-            $this->view('errors/403', ['title' => 'Sin permiso']);
-            exit;
-        }
+        parent::__construct($config, $db);
+        $this->roles = new RolesModel($db);
     }
 
     public function index(): void
     {
-        $this->authorize();
-        $roles = (new Role())->all();
-        $this->view('roles/index', ['title' => 'Roles', 'roles' => $roles]);
+        $this->requireLogin();
+        $this->requireRole('admin');
+        $roles = $this->roles->all();
+        $userCounts = $this->db->fetchAll('SELECT role_id, COUNT(*) as total FROM users WHERE deleted_at IS NULL GROUP BY role_id');
+        $countByRole = [];
+        foreach ($userCounts as $row) {
+            $countByRole[(int)$row['role_id']] = (int)$row['total'];
+        }
+
+        $this->render('roles/index', [
+            'title' => 'Roles de usuarios',
+            'pageTitle' => 'Roles de usuarios',
+            'roles' => $roles,
+            'countByRole' => $countByRole,
+        ]);
     }
 
     public function create(): void
     {
-        $this->authorize();
-        $permissions = (new Permission())->all();
-        $this->view('roles/create', ['title' => 'Nuevo rol', 'permissions' => $permissions]);
+        $this->requireLogin();
+        $this->requireRole('admin');
+        $this->render('roles/create', [
+            'title' => 'Nuevo rol',
+            'pageTitle' => 'Nuevo rol',
+        ]);
     }
 
     public function store(): void
     {
-        $this->authorize();
-        $validator = new Validator();
-        if (!CSRF::validate(Request::input('csrf_token'))) {
-            $validator->required('csrf', null, 'Token CSRF inválido.');
+        $this->requireLogin();
+        $this->requireRole('admin');
+        verify_csrf();
+        $name = trim($_POST['name'] ?? '');
+        if ($name === '') {
+            flash('error', 'Ingresa el nombre del rol.');
+            $this->redirect('index.php?route=roles/create');
         }
-        $name = Request::sanitize((string) Request::input('name'));
-        $description = Request::sanitize((string) Request::input('description'));
-        $validator->required('name', $name, 'Nombre requerido.');
-        if ($validator->fails()) {
-            $permissions = (new Permission())->all();
-            $this->view('roles/create', ['title' => 'Nuevo rol', 'permissions' => $permissions, 'errors' => $validator->errors()]);
-            return;
+        $existing = $this->db->fetch('SELECT id FROM roles WHERE name = :name', ['name' => $name]);
+        if ($existing) {
+            flash('error', 'Ya existe un rol con ese nombre.');
+            $this->redirect('index.php?route=roles/create');
         }
-        $roleId = (new Role())->create(['name' => $name, 'description' => $description]);
-        (new RolePermission())->sync($roleId, (array) ($_POST['permissions'] ?? []));
-        (new AuditLog())->log($_SESSION['user_id'] ?? null, 'create', 'roles', $roleId, ['name' => $name]);
-        $this->redirect('/roles');
+
+        $now = date('Y-m-d H:i:s');
+        $roleId = $this->roles->create([
+            'name' => $name,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        audit($this->db, Auth::user()['id'], 'create', 'roles', $roleId);
+        flash('success', 'Rol creado correctamente.');
+        $this->redirect('index.php?route=roles');
     }
 
-    public function edit(string $id): void
+    public function edit(): void
     {
-        $this->authorize();
-        $role = (new Role())->find((int) $id);
-        $permissions = (new Permission())->all();
-        $selected = (new RolePermission())->getPermissionsForRole((int) $id);
-        $this->view('roles/edit', ['title' => 'Editar rol', 'role' => $role, 'permissions' => $permissions, 'selected' => $selected]);
+        $this->requireLogin();
+        $this->requireRole('admin');
+        $id = (int)($_GET['id'] ?? 0);
+        $role = $this->roles->find($id);
+        if (!$role) {
+            flash('error', 'Rol no encontrado.');
+            $this->redirect('index.php?route=roles');
+        }
+        $this->render('roles/edit', [
+            'title' => 'Editar rol',
+            'pageTitle' => 'Editar rol',
+            'role' => $role,
+        ]);
     }
 
-    public function update(string $id): void
+    public function update(): void
     {
-        $this->authorize();
-        $validator = new Validator();
-        if (!CSRF::validate(Request::input('csrf_token'))) {
-            $validator->required('csrf', null, 'Token CSRF inválido.');
+        $this->requireLogin();
+        $this->requireRole('admin');
+        verify_csrf();
+        $id = (int)($_POST['id'] ?? 0);
+        $role = $this->roles->find($id);
+        if (!$role) {
+            flash('error', 'Rol no encontrado.');
+            $this->redirect('index.php?route=roles');
         }
-        $name = Request::sanitize((string) Request::input('name'));
-        $description = Request::sanitize((string) Request::input('description'));
-        $validator->required('name', $name, 'Nombre requerido.');
-        if ($validator->fails()) {
-            $permissions = (new Permission())->all();
-            $selected = (new RolePermission())->getPermissionsForRole((int) $id);
-            $this->view('roles/edit', ['title' => 'Editar rol', 'role' => (new Role())->find((int) $id), 'permissions' => $permissions, 'selected' => $selected, 'errors' => $validator->errors()]);
-            return;
+        $name = trim($_POST['name'] ?? '');
+        if ($name === '') {
+            flash('error', 'Ingresa el nombre del rol.');
+            $this->redirect('index.php?route=roles/edit&id=' . $id);
         }
-        (new Role())->update((int) $id, ['name' => $name, 'description' => $description]);
-        (new RolePermission())->sync((int) $id, (array) ($_POST['permissions'] ?? []));
-        (new AuditLog())->log($_SESSION['user_id'] ?? null, 'update', 'roles', (int) $id, ['name' => $name]);
-        $this->redirect('/roles');
+        $existing = $this->db->fetch('SELECT id FROM roles WHERE name = :name AND id != :id', ['name' => $name, 'id' => $id]);
+        if ($existing) {
+            flash('error', 'Ya existe un rol con ese nombre.');
+            $this->redirect('index.php?route=roles/edit&id=' . $id);
+        }
+        $this->roles->update($id, [
+            'name' => $name,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        audit($this->db, Auth::user()['id'], 'update', 'roles', $id);
+        flash('success', 'Rol actualizado correctamente.');
+        $this->redirect('index.php?route=roles');
     }
 
-    public function delete(string $id): void
+    public function delete(): void
     {
-        $this->authorize();
-        if (!CSRF::validate(Request::input('csrf_token'))) {
-            $this->redirect('/roles');
-            return;
+        $this->requireLogin();
+        $this->requireRole('admin');
+        verify_csrf();
+        $id = (int)($_POST['id'] ?? 0);
+        $role = $this->roles->find($id);
+        if (!$role) {
+            flash('error', 'Rol no encontrado.');
+            $this->redirect('index.php?route=roles');
         }
-        (new Role())->delete((int) $id);
-        (new AuditLog())->log($_SESSION['user_id'] ?? null, 'delete', 'roles', (int) $id, []);
-        $this->redirect('/roles');
+        $usage = $this->db->fetch('SELECT COUNT(*) as total FROM users WHERE role_id = :id AND deleted_at IS NULL', ['id' => $id]);
+        if (!empty($usage['total'])) {
+            flash('error', 'No se puede eliminar el rol porque tiene usuarios asociados.');
+            $this->redirect('index.php?route=roles');
+        }
+        $this->db->execute('DELETE FROM role_permissions WHERE role_id = :id', ['id' => $id]);
+        $this->db->execute('DELETE FROM roles WHERE id = :id', ['id' => $id]);
+        audit($this->db, Auth::user()['id'], 'delete', 'roles', $id);
+        flash('success', 'Rol eliminado correctamente.');
+        $this->redirect('index.php?route=roles');
     }
 }

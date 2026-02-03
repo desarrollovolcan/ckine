@@ -1,33 +1,28 @@
-<?php use App\Core\CSRF; ?>
-<h4 class="mb-3">Editar rol</h4>
-<form method="post" action="/roles/<?php echo $role['id']; ?>/update">
-    <input type="hidden" name="csrf_token" value="<?php echo CSRF::token(); ?>">
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($role['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
-        <?php if (!empty($errors['name'])): ?>
-            <small class="text-danger"><?php echo implode(', ', $errors['name']); ?></small>
-        <?php endif; ?>
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title mb-0">Editar rol</h4>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <input type="text" name="description" class="form-control" value="<?php echo htmlspecialchars($role['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Permisos</label>
-        <div class="row">
-            <?php foreach ($permissions as $permission): ?>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="permissions[]" value="<?php echo $permission['id']; ?>" id="perm_<?php echo $permission['id']; ?>" <?php echo in_array($permission['id'], $selected ?? [], true) ? 'checked' : ''; ?>>
-                        <label class="form-check-label" for="perm_<?php echo $permission['id']; ?>">
-                            <?php echo htmlspecialchars($permission['description'] ?? $permission['key'], ENT_QUOTES, 'UTF-8'); ?>
-                        </label>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <button class="btn btn-primary" type="submit">Actualizar</button>
-    <a class="btn btn-light" href="/roles">Cancelar</a>
+    <div class="card-body">
+        <form method="post" action="index.php?route=roles/update">
+            <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+            <input type="hidden" name="id" value="<?php echo (int)($role['id'] ?? 0); ?>">
+            <div class="mb-3">
+                <?php echo render_id_badge($role['id'] ?? null); ?>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nombre del rol</label>
+                <input type="text" name="name" class="form-control" value="<?php echo e($role['name'] ?? ''); ?>" required>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a href="index.php?route=roles" class="btn btn-light">Cancelar</a>
+            </div>
+        
+    <?php
+    $reportTemplate = 'informeIcargaEspanol.php';
+    $reportSource = 'roles/edit';
+    include __DIR__ . '/../partials/report-download.php';
+    ?>
 </form>
+    </div>
+</div>

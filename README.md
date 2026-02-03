@@ -1,64 +1,48 @@
-# Sistema Centro Kinésico (PHP MVC)
+# GoCreative Ges
+
+Sistema minimalista para gestión de clientes, proyectos, servicios recurrentes, cobranzas y automatización de correos.
 
 ## Requisitos
 - PHP 8+
-- MySQL 8+
-- Apache/Nginx apuntando a `/public`
+- MySQL 5.7/8.0
+- Servidor web (Apache/Nginx)
 
-## Configuración de base de datos
-Variables de entorno disponibles:
-- `DB_HOST` (default: 127.0.0.1)
-- `DB_PORT` (default: 3306)
-- `DB_NAME` (default: ckine)
-- `DB_USER` (default: root)
-- `DB_PASS` (default: vacío)
+## Instalación
+1. Clona el repositorio.
+2. Crea la base de datos e importa `bd/database.sql` (o `bd/database_full.sql` si quieres todas las actualizaciones aplicadas).
+3. Configura las credenciales en `app/config/config.php`.
+4. Apunta tu servidor web a la raíz del proyecto.
+5. Ingresa con:
+   - **Usuario:** eisla@gocreative.cl
+   - **Contraseña:** Ei1245.$
 
-Opcional:
-- `APP_BASE_URL` (default: `/`)
-- `APP_TIMEZONE` (default: `America/Santiago`)
-- `PUBLIC_PORTAL_ENABLED` (default: true)
+## Configuración SMTP
+- Ingresar en **Configuración -> SMTP** y completar ambas cuentas (Cobranza e Información).
+- Las contraseñas se almacenan en la tabla `settings` como JSON.
 
-## Ejecutar migraciones
-1. Crear la base de datos manualmente (si no existe).
-2. Ejecutar el runner de migraciones:
+## Cron Jobs
+Ejecuta los jobs desde CLI:
 
 ```bash
-php public/migrate.php
+php cron/run.php check_expirations
+php cron/run.php generate_invoices
+php cron/run.php send_scheduled_emails
 ```
 
-El esquema completo se encuentra en `/database/schema.sql`.
+Se recomienda configurar cron en el sistema operativo para ejecutarlos según necesidad.
 
-## Estructura MVC
-```
-/public
-  index.php
-  migrate.php
-/app
-  /controllers
-  /models
-  /views
-  /core
-  /middlewares
-/config
-/database
-/storage
-```
+## Flujo recomendado
+1. Crear cliente.
+2. Crear servicio recurrente.
+3. Generar factura (manual o automática).
+4. Encolar correo desde Cola de correos.
+5. Ejecutar `send_scheduled_emails`.
+6. Registrar pago.
 
-## Credenciales iniciales
-- Usuario: `admin@local`
-- Contraseña: `Admin123!`
+## Seguridad
+- CSRF en formularios.
+- Passwords con `password_hash`.
+- Prepared statements en todas las consultas.
 
-Al primer login se solicita cambio de contraseña.
-
-## Módulos disponibles
-- Autenticación
-- Usuarios / Roles / Permisos
-- Pacientes
-- Profesionales
-- Box
-- Servicios
-- Agenda / Citas
-- Portal público de agendamiento (`/portal`)
-- Ficha clínica
-- Reportes
-- Auditoría
+## Logs
+- `storage/logs/app.log`

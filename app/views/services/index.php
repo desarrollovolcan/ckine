@@ -1,31 +1,76 @@
-<?php use App\Core\CSRF; ?>
-<div class="d-flex justify-content-between mb-3">
-    <h4>Servicios</h4>
-    <a class="btn btn-primary" href="/services/create">Nuevo servicio</a>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">Servicios recurrentes</h4>
+        <a href="index.php?route=services/create" class="btn btn-primary">Nuevo servicio</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Servicio</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Vencimiento</th>
+                        <th>Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($services as $service): ?>
+                        <tr>
+                            <td class="text-muted">#<?php echo (int)$service['id']; ?></td>
+                            <td><?php echo e($service['name']); ?></td>
+                            <td><?php echo e($service['client_name']); ?></td>
+                            <td><?php echo e($service['service_type']); ?></td>
+                            <td><?php echo e(format_date($service['due_date'])); ?></td>
+                            <td>
+                                <?php
+                                $status = $service['status'] ?? 'activo';
+                                $statusColor = match ($status) {
+                                    'activo' => 'success',
+                                    'vencido' => 'danger',
+                                    'renovado' => 'primary',
+                                    default => 'secondary',
+                                };
+                                ?>
+                                <span class="badge bg-<?php echo $statusColor; ?>-subtle text-<?php echo $statusColor; ?>">
+                                    <?php echo e($status); ?>
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="dropdown actions-dropdown">
+                                    <button class="btn btn-soft-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acciones
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a href="index.php?route=services/show&id=<?php echo $service['id']; ?>" class="dropdown-item">Ver</a></li>
+                                        <li><a href="index.php?route=services/edit&id=<?php echo $service['id']; ?>" class="dropdown-item">Editar</a></li>
+                                        <li>
+                                            <a href="index.php?route=invoices/create&service_id=<?php echo $service['id']; ?>&client_id=<?php echo (int)$service['client_id']; ?>" class="dropdown-item">Crear factura</a>
+                                        </li>
+                                        <li>
+                                            <form method="post" action="index.php?route=services/generate-invoice">
+                                                <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                                <input type="hidden" name="id" value="<?php echo $service['id']; ?>">
+                                                <button type="submit" class="dropdown-item dropdown-item-button">Facturar</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="post" action="index.php?route=services/delete" onsubmit="return confirm('¿Eliminar este servicio?');">
+                                                <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                                <input type="hidden" name="id" value="<?php echo $service['id']; ?>">
+                                                <button type="submit" class="dropdown-item dropdown-item-button text-danger">Eliminar</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Duración</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($services as $service): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($service['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($service['duration_minutes'], ENT_QUOTES, 'UTF-8'); ?> min</td>
-                <td><?php echo $service['price'] !== null ? '$' . number_format($service['price'], 0, ',', '.') : '-'; ?></td>
-                <td class="d-flex gap-2">
-                    <a class="btn btn-sm btn-info" href="/services/<?php echo $service['id']; ?>/edit">Editar</a>
-                    <form method="post" action="/services/<?php echo $service['id']; ?>/delete" onsubmit="return confirm('¿Eliminar servicio?')">
-                        <input type="hidden" name="csrf_token" value="<?php echo CSRF::token(); ?>">
-                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
