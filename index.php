@@ -16,6 +16,9 @@ $route = (string)$_GET['route'];
 $publicRoutes = [
     'auth/login',
     'auth/login/submit',
+    'patients/portal/login',
+    'patients/portal',
+    'patients/portal/logout',
 ];
 
 if (!Auth::check() && !in_array($route, $publicRoutes, true)) {

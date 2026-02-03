@@ -1,7 +1,7 @@
 <?php include __DIR__ . '/../../../partials/html.php'; ?>
 
 <head>
-    <?php $title = $title ?? 'Portal Cliente'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
+    <?php $title = $title ?? 'Portal Pacientes'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
     <?php include __DIR__ . '/../../../partials/head-css.php'; ?>
 </head>
 
@@ -15,7 +15,12 @@
                 <div class="d-flex align-items-center gap-3">
                     <img src="<?php echo e($logoColor); ?>" alt="logo" style="height: 36px;">
                     <div>
-                        <h4 class="mb-0"><?php echo e($pageTitle ?? 'Portal Cliente'); ?></h4>
+                        <?php $portalPatientUrl = 'index.php?route=patients/portal/login'; ?>
+                        <h4 class="mb-0">
+                            <a class="text-decoration-none" href="<?php echo e($portalPatientUrl); ?>">
+                                <?php echo e($pageTitle ?? 'Portal Pacientes'); ?>
+                            </a>
+                        </h4>
                         <p class="text-muted mb-0">Información de actividades y pagos</p>
                     </div>
                 </div>
