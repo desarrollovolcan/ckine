@@ -41,6 +41,15 @@ $isAdmin = ($currentUser['role'] ?? '') === 'Admin';
                 </a>
             </li>
             <li class="side-nav-item">
+                <a href="index.php?route=kinecico" class="side-nav-link">
+                    <span class="menu-icon"><i data-lucide="layout-dashboard"></i></span>
+                    <span class="menu-label">
+                        <span class="menu-text">Panel Kinésico</span>
+                        <span class="menu-caption">Vista operativa</span>
+                    </span>
+                </a>
+            </li>
+            <li class="side-nav-item">
                 <a href="/agenda" class="side-nav-link">
                     <span class="menu-icon"><i data-lucide="calendar"></i></span>
                     <span class="menu-label">
