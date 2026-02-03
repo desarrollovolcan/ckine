@@ -41,6 +41,42 @@
                     <label class="form-label">Teléfono</label>
                     <input type="text" name="phone" class="form-control" value="<?php echo e($patient['phone'] ?? ''); ?>">
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" name="address" class="form-control" value="<?php echo e($patient['address'] ?? ''); ?>">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Ocupación</label>
+                    <input type="text" name="occupation" class="form-control" value="<?php echo e($patient['occupation'] ?? ''); ?>">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Seguro/Previsión</label>
+                    <input type="text" name="insurance" class="form-control" value="<?php echo e($patient['insurance'] ?? ''); ?>">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Profesional derivante</label>
+                    <input type="text" name="referring_physician" class="form-control" value="<?php echo e($patient['referring_physician'] ?? ''); ?>">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Contacto de emergencia</label>
+                    <input type="text" name="emergency_contact_name" class="form-control" value="<?php echo e($patient['emergency_contact_name'] ?? ''); ?>">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Teléfono emergencia</label>
+                    <input type="text" name="emergency_contact_phone" class="form-control" value="<?php echo e($patient['emergency_contact_phone'] ?? ''); ?>">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Motivo de consulta</label>
+                    <textarea name="reason_for_visit" class="form-control" rows="2"><?php echo e($patient['reason_for_visit'] ?? ''); ?></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Diagnóstico/objetivo terapéutico</label>
+                    <textarea name="diagnosis" class="form-control" rows="2"><?php echo e($patient['diagnosis'] ?? ''); ?></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Alergias/precauciones</label>
+                    <textarea name="allergies" class="form-control" rows="2"><?php echo e($patient['allergies'] ?? ''); ?></textarea>
+                </div>
                 <div class="col-12">
                     <label class="form-label">Observaciones clínicas</label>
                     <textarea name="notes" class="form-control" rows="3"><?php echo e($patient['notes'] ?? ''); ?></textarea>

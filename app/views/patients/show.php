@@ -24,6 +24,15 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">RUT: <?php echo e($patient['rut'] ?? 'No informado'); ?></li>
                     <li class="list-group-item">Fecha de nacimiento: <?php echo e($patient['birthdate'] ? format_date($patient['birthdate']) : 'No informada'); ?></li>
+                    <li class="list-group-item">Dirección: <?php echo e($patient['address'] ?? 'No informada'); ?></li>
+                    <li class="list-group-item">Ocupación: <?php echo e($patient['occupation'] ?? 'No informada'); ?></li>
+                    <li class="list-group-item">Seguro/Previsión: <?php echo e($patient['insurance'] ?? 'No informada'); ?></li>
+                    <li class="list-group-item">Profesional derivante: <?php echo e($patient['referring_physician'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Contacto de emergencia: <?php echo e($patient['emergency_contact_name'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Teléfono emergencia: <?php echo e($patient['emergency_contact_phone'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Motivo de consulta: <?php echo e($patient['reason_for_visit'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Diagnóstico/objetivo terapéutico: <?php echo e($patient['diagnosis'] ?? 'No informado'); ?></li>
+                    <li class="list-group-item">Alergias/precauciones: <?php echo e($patient['allergies'] ?? 'No informado'); ?></li>
                     <li class="list-group-item">Observaciones: <?php echo e($patient['notes'] ?? 'Sin observaciones'); ?></li>
                 </ul>
                 <div class="mt-3 d-flex gap-2 justify-content-end">
