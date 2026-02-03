@@ -53,7 +53,7 @@ $hasCompanies = !empty($hasCompanies ?? $companies ?? []);
                                 <div class="alert alert-warning text-start mt-3">No hay empresas activas configuradas. Contacta al administrador para continuar.</div>
                             <?php endif; ?>
 
-                            <form class="mt-4" method="post" action="login.php">
+                            <form class="mt-4" method="post" action="index.php?route=auth/login/submit">
                                 <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
                                 <fieldset <?php echo $hasCompanies ? '' : 'disabled'; ?>>
                                     <div class="app-search w-100 input-group rounded-pill mb-3">

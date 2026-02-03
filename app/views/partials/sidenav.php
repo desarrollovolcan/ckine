@@ -66,6 +66,155 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                     </a>
                 </li>
             <?php endif; ?>
+            <?php if ($hasCompany && $canAccessAny(['patients_view', 'professionals_view', 'boxes_view', 'services_view', 'appointments_view', 'patient_portal_view', 'clinical_records_view', 'reports_view'])): ?>
+                <li class="side-nav-title">Clínica</li>
+                <?php if ($hasPermission('patients_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=patients" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="users"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Pacientes</span>
+                                <span class="menu-caption">Fichas y seguimiento</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('professionals_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=professionals" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="stethoscope"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Profesionales</span>
+                                <span class="menu-caption">Equipo clínico</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('boxes_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=boxes" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="door-open"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Box / Salas</span>
+                                <span class="menu-caption">Espacios disponibles</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('services_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=services" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="briefcase"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Servicios</span>
+                                <span class="menu-caption">Prestaciones clínicas</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('appointments_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=appointments/calendar" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="calendar-days"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Agenda / Citas</span>
+                                <span class="menu-caption">Calendario clínico</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('patient_portal_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=patient-portal" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="globe"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Portal pacientes</span>
+                                <span class="menu-caption">Agendamiento online</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('clinical_records_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=clinical" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="file-text"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Historial clínico</span>
+                                <span class="menu-caption">Evolución y notas</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('reports_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=reports" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="bar-chart-3"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Reportes</span>
+                                <span class="menu-caption">Indicadores y métricas</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endif; ?>
+            <?php if ($hasCompany && $canAccessAny(['users_view', 'roles_view', 'users_permissions_view', 'audit_view', 'settings_view'])): ?>
+                <li class="side-nav-title">Administración</li>
+                <?php if ($hasPermission('users_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=users" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="user-cog"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Usuarios</span>
+                                <span class="menu-caption">Cuentas y accesos</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('roles_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=roles" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="shield"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Roles</span>
+                                <span class="menu-caption">Perfiles de acceso</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('users_permissions_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=users/permissions" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="key-round"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Permisos</span>
+                                <span class="menu-caption">Matriz de permisos</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('audit_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=audit" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="clipboard-check"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Auditoría / Logs</span>
+                                <span class="menu-caption">Acciones del sistema</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($hasPermission('settings_view')): ?>
+                    <li class="side-nav-item">
+                        <a href="index.php?route=settings" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="settings"></i></span>
+                            <span class="menu-label">
+                                <span class="menu-text">Configuración</span>
+                                <span class="menu-caption">Parámetros generales</span>
+                            </span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endif; ?>
             <?php if ($hasCompany && $canAccessAny(['products_view', 'products_edit', 'produced_products_view', 'produced_products_edit', 'product_families_view', 'product_subfamilies_view', 'production_view', 'production_edit'])): ?>
                 <li class="side-nav-title">Productos</li>
                 <li class="side-nav-item">

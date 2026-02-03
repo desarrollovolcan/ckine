@@ -27,6 +27,7 @@ class Controller
             if ($roleId) {
                 $permissions = role_permissions($this->db, $roleId);
             }
+            $permissions = array_values(array_unique(array_merge($permissions, role_default_permissions($currentUser['role'] ?? ''))));
         }
         try {
             $companyId = current_company_id();
@@ -93,7 +94,7 @@ class Controller
     protected function requireLogin(): void
     {
         if (!Auth::check()) {
-            $this->redirect('login.php');
+            $this->redirect('index.php?route=auth/login');
         }
     }
 

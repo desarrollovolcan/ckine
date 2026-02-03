@@ -1,7 +1,22 @@
 <?php
 
-class ReportsController
+class ReportsController extends Controller
 {
+    public function index(): void
+    {
+        $this->requireLogin();
+        $reports = [
+            ['title' => 'Reporte de citas', 'description' => 'Resumen mensual de agenda y ocupación', 'updated' => 'Hace 2 días'],
+            ['title' => 'Reporte financiero', 'description' => 'Ingresos por servicios y prestaciones', 'updated' => 'Hace 1 semana'],
+            ['title' => 'Reporte de pacientes', 'description' => 'Altas, bajas y estado clínico', 'updated' => 'Hoy'],
+        ];
+        $this->render('reports/index', [
+            'title' => 'Reportes',
+            'subtitle' => 'Gestión',
+            'reports' => $reports,
+        ]);
+    }
+
     public function download(): void
     {
         $isPost = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';

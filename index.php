@@ -2,17 +2,38 @@
 require __DIR__ . '/app/bootstrap.php';
 
 $routes = require __DIR__ . '/app/routes.php';
-$route = $_GET['route'] ?? 'dashboard';
+
+if (!isset($_GET['route'])) {
+    if (Auth::check()) {
+        header('Location: index.php?route=dashboard');
+    } else {
+        header('Location: index.php?route=auth/login');
+    }
+    exit;
+}
+
+$route = (string)$_GET['route'];
+$publicRoutes = [
+    'auth/login',
+    'auth/login/submit',
+];
+
+if (!Auth::check() && !in_array($route, $publicRoutes, true)) {
+    header('Location: index.php?route=auth/login');
+    exit;
+}
 
 if (!isset($routes[$route])) {
     http_response_code(404);
-    echo 'Ruta no encontrada';
+    $controller = new ErrorController($config, $db);
+    $controller->notFound();
     exit;
 }
 
 if (Auth::check() && !can_access_route($db, $route, Auth::user())) {
-    $_SESSION['error'] = 'No tienes permisos para acceder a esta sección.';
-    header('Location: index.php?route=dashboard');
+    http_response_code(403);
+    $controller = new ErrorController($config, $db);
+    $controller->forbidden();
     exit;
 }
 
