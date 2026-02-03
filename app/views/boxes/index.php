@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title mb-0">Usuarios</h4>
-        <a href="/usuarios/nuevo" class="btn btn-primary btn-sm">Nuevo usuario</a>
+        <h4 class="card-title mb-0">Box clínicos</h4>
+        <a href="/box/nuevo" class="btn btn-primary btn-sm">Nuevo box</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -9,22 +9,22 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Rol</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
                         <th class="text-end">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($users as $user): ?>
+                    <?php foreach ($boxes as $box): ?>
                         <tr>
-                            <td><?php echo e($user['name']); ?></td>
-                            <td><?php echo e($user['email']); ?></td>
-                            <td><?php echo e($user['role_name'] ?? '-'); ?></td>
+                            <td><?php echo e($box['name']); ?></td>
+                            <td><?php echo e($box['description']); ?></td>
+                            <td><?php echo e($box['status']); ?></td>
                             <td class="text-end">
-                                <a href="/usuarios/editar?id=<?php echo (int)$user['id']; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
-                                <form method="post" action="/usuarios/eliminar" class="d-inline" onsubmit="return confirm('¿Eliminar usuario?');">
+                                <a href="/box/editar?id=<?php echo (int)$box['id']; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <form method="post" action="/box/eliminar" class="d-inline" onsubmit="return confirm('¿Eliminar box?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
-                                    <input type="hidden" name="id" value="<?php echo (int)$user['id']; ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int)$box['id']; ?>">
                                     <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
                                 </form>
                             </td>
