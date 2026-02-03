@@ -41,10 +41,29 @@ class AppointmentsController extends Controller
     public function calendar(): void
     {
         $this->requireLogin();
-        $this->requireCompany();
+        $companyId = $this->requireCompany();
+        $today = new DateTimeImmutable('today');
+        $startDate = $today->format('Y-m-d');
+        $endDate = $today->modify('+6 days')->format('Y-m-d');
+        $appointments = $this->appointments->byDateRange($companyId, $startDate, $endDate);
+        $appointmentsByDate = [];
+        foreach ($appointments as $appointment) {
+            $appointmentsByDate[$appointment['appointment_date']][] = $appointment;
+        }
+        $calendarDays = [];
+        for ($i = 0; $i < 7; $i++) {
+            $date = $today->modify("+{$i} days")->format('Y-m-d');
+            $calendarDays[] = [
+                'date' => $date,
+                'appointments' => $appointmentsByDate[$date] ?? [],
+            ];
+        }
+        $todayAppointments = $appointmentsByDate[$startDate] ?? [];
         $this->render('appointments/calendar', [
             'title' => 'Calendario de citas',
             'subtitle' => 'Agenda',
+            'calendarDays' => $calendarDays,
+            'todayAppointments' => $todayAppointments,
         ]);
     }
 
