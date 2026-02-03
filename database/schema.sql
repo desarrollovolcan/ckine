@@ -169,6 +169,18 @@ CREATE TABLE attachments (
     CONSTRAINT fk_attachments_patient FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
 );
 
+CREATE TABLE kine_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NULL,
+    service_id INT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    method VARCHAR(50) NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pagado',
+    created_at DATETIME NOT NULL,
+    CONSTRAINT fk_kine_payments_patient FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE SET NULL,
+    CONSTRAINT fk_kine_payments_service FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE SET NULL
+);
+
 CREATE TABLE audit_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
