@@ -42,6 +42,15 @@
                     <input type="text" name="phone" class="form-control" value="<?php echo e($patient['phone'] ?? ''); ?>">
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label">Contraseña portal</label>
+                    <div class="input-group">
+                        <input type="password" name="portal_password" class="form-control" placeholder="Nueva contraseña" data-password-field>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle-password>Mostrar</button>
+                        <button class="btn btn-outline-secondary" type="button" data-generate-password>Generar</button>
+                    </div>
+                    <small class="text-muted">Deja en blanco para mantener la contraseña actual.</small>
+                </div>
+                <div class="col-md-6">
                     <label class="form-label">Dirección</label>
                     <input type="text" name="address" class="form-control" value="<?php echo e($patient['address'] ?? ''); ?>">
                 </div>
@@ -89,3 +98,31 @@
         </form>
     </div>
 </div>
+
+<script>
+    const patientEditForm = document.querySelector('form[action^="index.php?route=patients/update"]');
+
+    document.querySelector('[data-generate-password]')?.addEventListener('click', () => {
+        const passwordInput = patientEditForm?.querySelector('[data-password-field]');
+        if (!passwordInput) {
+            return;
+        }
+        const charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789@#$%';
+        let password = '';
+        for (let i = 0; i < 10; i += 1) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        passwordInput.value = password;
+    });
+
+    document.querySelector('[data-toggle-password]')?.addEventListener('click', (event) => {
+        const button = event.currentTarget;
+        const passwordInput = patientEditForm?.querySelector('[data-password-field]');
+        if (!passwordInput || !button) {
+            return;
+        }
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        button.textContent = isPassword ? 'Ocultar' : 'Mostrar';
+    });
+</script>

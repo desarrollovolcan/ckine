@@ -48,8 +48,13 @@ class PatientsController extends Controller
         verify_csrf();
         $companyId = $this->requireCompany();
         $name = trim($_POST['name'] ?? '');
+        $portalPassword = trim($_POST['portal_password'] ?? '');
         if ($name === '') {
             flash('error', 'El nombre es obligatorio.');
+            $this->redirect('index.php?route=patients/create');
+        }
+        if ($portalPassword === '') {
+            flash('error', 'Define una contraseña para el portal del paciente.');
             $this->redirect('index.php?route=patients/create');
         }
         $birthdate = trim($_POST['birthdate'] ?? '');
@@ -72,6 +77,7 @@ class PatientsController extends Controller
             'diagnosis' => trim($_POST['diagnosis'] ?? ''),
             'allergies' => trim($_POST['allergies'] ?? ''),
             'notes' => trim($_POST['notes'] ?? ''),
+            'portal_password' => password_hash($portalPassword, PASSWORD_DEFAULT),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -116,7 +122,8 @@ class PatientsController extends Controller
         }
         $birthdate = trim($_POST['birthdate'] ?? '');
         $birthdate = $birthdate !== '' ? $birthdate : null;
-        $this->patients->update($patientId, [
+        $portalPassword = trim($_POST['portal_password'] ?? '');
+        $data = [
             'name' => $name,
             'rut' => trim($_POST['rut'] ?? ''),
             'birthdate' => $birthdate,
@@ -134,7 +141,11 @@ class PatientsController extends Controller
             'allergies' => trim($_POST['allergies'] ?? ''),
             'notes' => trim($_POST['notes'] ?? ''),
             'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        ];
+        if ($portalPassword !== '') {
+            $data['portal_password'] = password_hash($portalPassword, PASSWORD_DEFAULT);
+        }
+        $this->patients->update($patientId, $data);
         audit($this->db, Auth::user()['id'], 'update', 'patients', $patientId);
         flash('success', 'Paciente actualizado correctamente.');
         $this->redirect('index.php?route=patients');

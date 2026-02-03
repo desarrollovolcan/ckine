@@ -3227,6 +3227,7 @@ CREATE TABLE patients (
     diagnosis TEXT NULL,
     allergies TEXT NULL,
     notes TEXT NULL,
+    portal_password VARCHAR(255) NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     deleted_at DATETIME NULL,
