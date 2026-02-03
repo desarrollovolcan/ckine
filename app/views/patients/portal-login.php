@@ -16,7 +16,7 @@ $loginLogoSrc = login_logo_src($companySettings ?? []);
                     <div class="mt-auto">
                         <div class="p-2 text-center">
                             <h3 class="fw-bold my-2">Acceso Portal de Pacientes</h3>
-                            <p class="text-muted mb-0">Ingresa con tu correo (o RUT) y fecha de nacimiento.</p>
+                            <p class="text-muted mb-0">Ingresa con tu correo (o RUT) y contraseña de portal.</p>
 
                             <?php if (!empty($error)): ?>
                                 <div class="alert alert-danger text-start mt-3"><?php echo e($error); ?></div>
@@ -39,10 +39,10 @@ $loginLogoSrc = login_logo_src($companySettings ?? []);
                                     <i data-lucide="circle-user" class="app-search-icon text-muted"></i>
                                 </div>
                                 <div class="app-search w-100 input-group rounded-pill mb-2">
-                                    <input type="date" name="birthdate" class="form-control py-2" value="<?php echo e($birthdate ?? ''); ?>" required>
-                                    <i data-lucide="calendar" class="app-search-icon text-muted"></i>
+                                    <input type="password" name="password" class="form-control py-2" placeholder="Contraseña de portal" required>
+                                    <i data-lucide="lock" class="app-search-icon text-muted"></i>
                                 </div>
-                                <p class="text-muted fs-xs mb-3">Usa la misma fecha registrada en la clínica para validar tu acceso.</p>
+                                <p class="text-muted fs-xs mb-3">Solicita tu contraseña al equipo de la clínica si no la recuerdas.</p>
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary fw-semibold">Ingresar al portal</button>
                                 </div>

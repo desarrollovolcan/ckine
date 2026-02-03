@@ -8,18 +8,18 @@ class PatientAccessController extends Controller
         unset($_SESSION['error']);
 
         $identifier = '';
-        $birthdate = '';
+        $password = '';
         $companyId = 0;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             verify_csrf();
             $identifier = trim($_POST['identifier'] ?? '');
-            $birthdate = trim($_POST['birthdate'] ?? '');
+            $password = trim($_POST['password'] ?? '');
             $companyId = (int)($_POST['company_id'] ?? 0);
 
             if ($companyId === 0) {
                 $error = 'Selecciona una empresa.';
-            } elseif ($identifier === '' || $birthdate === '') {
+            } elseif ($identifier === '' || $password === '') {
                 $error = 'Completa los datos solicitados.';
             } else {
                 $field = Validator::email($identifier) ? 'email' : 'rut';
@@ -27,19 +27,35 @@ class PatientAccessController extends Controller
                     $identifier = normalize_rut($identifier);
                 }
                 $patient = $this->db->fetch(
-                    "SELECT * FROM patients WHERE {$field} = :identifier AND birthdate = :birthdate AND company_id = :company_id AND deleted_at IS NULL",
+                    "SELECT * FROM patients WHERE {$field} = :identifier AND company_id = :company_id AND deleted_at IS NULL",
                     [
                         'identifier' => $identifier,
-                        'birthdate' => $birthdate,
                         'company_id' => $companyId,
                     ]
                 );
-                if (!$patient) {
-                    $error = 'No encontramos un paciente con esos datos.';
+                if (!$patient || empty($patient['portal_password'])) {
+                    $error = 'Las credenciales no son válidas.';
                 } else {
-                    $_SESSION['patient_portal_id'] = $patient['id'];
-                    $_SESSION['patient_company_id'] = $patient['company_id'];
-                    $this->redirect('index.php?route=patients/portal');
+                    $storedPassword = (string)$patient['portal_password'];
+                    $passwordMatches = password_verify($password, $storedPassword);
+                    if (!$passwordMatches && hash_equals($storedPassword, $password)) {
+                        $passwordMatches = true;
+                        $this->db->execute(
+                            'UPDATE patients SET portal_password = :password, updated_at = :updated_at WHERE id = :id',
+                            [
+                                'password' => password_hash($password, PASSWORD_DEFAULT),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                                'id' => $patient['id'],
+                            ]
+                        );
+                    }
+                    if (!$passwordMatches) {
+                        $error = 'Las credenciales no son válidas.';
+                    } else {
+                        $_SESSION['patient_portal_id'] = $patient['id'];
+                        $_SESSION['patient_company_id'] = $patient['company_id'];
+                        $this->redirect('index.php?route=patients/portal');
+                    }
                 }
             }
         }
@@ -50,7 +66,6 @@ class PatientAccessController extends Controller
             'hidePortalHeader' => true,
             'error' => $error,
             'identifier' => $identifier,
-            'birthdate' => $birthdate,
             'companyId' => $companyId,
             'companies' => (new CompaniesModel($this->db))->active(),
         ]);
