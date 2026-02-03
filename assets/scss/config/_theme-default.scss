@@ -7,8 +7,8 @@
 
     // Background Light left-sidebar
     html[data-menu-color="light"] {
-        --#{$prefix}sidenav-bg:                       #{$white};
-        --#{$prefix}sidenav-border-color:             #{$gray-300};
+        --#{$prefix}sidenav-bg:                       #f3fbf8;
+        --#{$prefix}sidenav-border-color:             #d6efe8;
         --#{$prefix}sidenav-item-color:               #{$gray-700};
         --#{$prefix}sidenav-item-hover-color:         #{$primary};
         --#{$prefix}sidenav-item-hover-bg:          null;
@@ -29,13 +29,13 @@
 
     // Background Gray left-sidebar
     html[data-menu-color="gray"] {
-        --#{$prefix}sidenav-bg:                       #e9ebef;
-        --#{$prefix}sidenav-border-color:             #e7e9eb;
+        --#{$prefix}sidenav-bg:                       #eaf6f2;
+        --#{$prefix}sidenav-border-color:             #d6efe8;
         --#{$prefix}sidenav-item-color:               #{$gray-700};
         --#{$prefix}sidenav-item-hover-color:         #{$primary};
-        --#{$prefix}sidenav-item-hover-bg:          #dbdfe7;
-        --#{$prefix}sidenav-item-active-color:        #212b29;
-        --#{$prefix}sidenav-item-active-bg:         #dbdfe7;
+        --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
+        --#{$prefix}sidenav-item-active-color:        #{$primary};
+        --#{$prefix}sidenav-item-active-bg:         #{$primary-bg-subtle};
     }
 
     // Gradient Menu
@@ -75,7 +75,7 @@
 
     // Light Topbar
     html[data-topbar-color="light"] {
-        --#{$prefix}topbar-bg:                      #ffffff;
+        --#{$prefix}topbar-bg:                      #f3fbf8;
         --#{$prefix}topbar-item-color:                #{$gray-700};
         --#{$prefix}topbar-item-hover-color:          #{$primary};
         --#{$prefix}topbar-search-bg:                 transparent;
@@ -84,11 +84,11 @@
 
     // Gray Topbar
     html[data-topbar-color="gray"] {
-        --#{$prefix}topbar-bg:                      #e9ebef;
+        --#{$prefix}topbar-bg:                      #eaf6f2;
         --#{$prefix}topbar-item-color:                #{$gray-700};
         --#{$prefix}topbar-item-hover-color:          #{$primary};
-        --#{$prefix}topbar-search-bg:               #e0e1e9;
-        --#{$prefix}topbar-search-border:           #e0e1e9;
+        --#{$prefix}topbar-search-bg:               #dff2ed;
+        --#{$prefix}topbar-search-border:           #dff2ed;
     }
 
     // Dark Topbar
