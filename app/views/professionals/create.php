@@ -9,19 +9,27 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Nombre completo</label>
-                    <input type="text" name="name" class="form-control" placeholder="Ej: Paula Fuentes">
+                    <input type="text" name="name" class="form-control" placeholder="Ej: Paula Fuentes" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">RUT</label>
+                    <input type="text" name="rut" class="form-control" placeholder="12.345.678-9" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Registro profesional</label>
+                    <input type="text" name="license_number" class="form-control" placeholder="KINE-2024-001" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Especialidad</label>
-                    <input type="text" name="specialty" class="form-control" placeholder="Kinesiología deportiva">
+                    <input type="text" name="specialty" class="form-control" placeholder="Kinesiología deportiva" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Correo</label>
-                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com">
+                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Teléfono</label>
-                    <input type="text" name="phone" class="form-control" placeholder="+56 9 1234 5678">
+                    <input type="text" name="phone" class="form-control" placeholder="+56 9 1234 5678" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Estado</label>
@@ -29,6 +37,28 @@
                         <option value="Activo">Activo</option>
                         <option value="En pausa">En pausa</option>
                     </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Modalidad</label>
+                    <select name="modality" class="form-select" required>
+                        <option value="" selected disabled>Selecciona</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Mixta">Mixta</option>
+                        <option value="Telemedicina">Telemedicina</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Box asignado</label>
+                    <select name="box" class="form-select">
+                        <option value="">Por definir</option>
+                        <option value="Box 1">Box 1</option>
+                        <option value="Box 2">Box 2</option>
+                        <option value="Box 3">Box 3</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Horario habitual</label>
+                    <input type="text" name="schedule" class="form-control" placeholder="Lun a Vie 08:00 - 16:00" required>
                 </div>
                 <div class="col-12">
                     <label class="form-label">Notas</label>
