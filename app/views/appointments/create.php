@@ -9,26 +9,46 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Paciente</label>
-                    <input type="text" name="patient" class="form-control" placeholder="Buscar paciente">
+                    <select name="patient_id" class="form-select" required>
+                        <option value="">Selecciona un paciente</option>
+                        <?php foreach ($patients as $patient): ?>
+                            <option value="<?php echo e($patient['id']); ?>"><?php echo e($patient['name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Profesional</label>
-                    <input type="text" name="professional" class="form-control" placeholder="Asignar profesional">
+                    <select name="professional_id" class="form-select" required>
+                        <option value="">Selecciona un profesional</option>
+                        <?php foreach ($professionals as $professional): ?>
+                            <option value="<?php echo e($professional['id']); ?>"><?php echo e($professional['name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Fecha</label>
-                    <input type="date" name="date" class="form-control">
+                    <input type="date" name="date" class="form-control" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Hora</label>
-                    <input type="time" name="time" class="form-control">
+                    <input type="time" name="time" class="form-control" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Box</label>
-                    <select name="box" class="form-select">
-                        <option value="Box 1">Box 1</option>
-                        <option value="Box 2">Box 2</option>
-                        <option value="Sala funcional">Sala funcional</option>
+                    <select name="box_id" class="form-select">
+                        <option value="">Sin asignar</option>
+                        <?php foreach ($boxes as $box): ?>
+                            <option value="<?php echo e($box['id']); ?>"><?php echo e($box['name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select name="status" class="form-select">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmada">Confirmada</option>
+                        <option value="En espera">En espera</option>
+                        <option value="Cancelada">Cancelada</option>
                     </select>
                 </div>
                 <div class="col-12">
