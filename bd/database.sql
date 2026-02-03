@@ -1314,6 +1314,38 @@ CREATE TABLE clinical_notes (
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
+CREATE TABLE boxes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    capacity VARCHAR(100) NULL,
+    equipment TEXT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Disponible',
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    deleted_at DATETIME NULL,
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    professional_id INT NOT NULL,
+    box_id INT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time TIME NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'Pendiente',
+    notes TEXT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    deleted_at DATETIME NULL,
+    FOREIGN KEY (company_id) REFERENCES companies(id),
+    FOREIGN KEY (patient_id) REFERENCES patients(id),
+    FOREIGN KEY (professional_id) REFERENCES professionals(id),
+    FOREIGN KEY (box_id) REFERENCES boxes(id)
+);
+
 CREATE TABLE professionals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     company_id INT NOT NULL,
