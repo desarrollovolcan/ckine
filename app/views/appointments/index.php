@@ -28,12 +28,12 @@
                     <?php foreach ($appointments as $appointment): ?>
                         <tr>
                             <td><?php echo e($appointment['id']); ?></td>
-                            <td><?php echo e($appointment['patient']); ?></td>
-                            <td><?php echo e($appointment['professional']); ?></td>
-                            <td><?php echo e(format_date($appointment['date'])); ?></td>
-                            <td><?php echo e($appointment['time']); ?></td>
-                            <td><?php echo e($appointment['box']); ?></td>
-                            <td><span class="badge bg-light text-dark"><?php echo e($appointment['status']); ?></span></td>
+                            <td><?php echo e($appointment['patient_name'] ?? ''); ?></td>
+                            <td><?php echo e($appointment['professional_name'] ?? ''); ?></td>
+                            <td><?php echo e(format_date($appointment['appointment_date'] ?? '')); ?></td>
+                            <td><?php echo e($appointment['appointment_time'] ?? ''); ?></td>
+                            <td><?php echo e($appointment['box_name'] ?? 'Sin asignar'); ?></td>
+                            <td><span class="badge bg-light text-dark"><?php echo e($appointment['status'] ?? ''); ?></span></td>
                             <td class="text-end">
                                 <div class="d-inline-flex gap-2">
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Reagendar</button>

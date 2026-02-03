@@ -9,23 +9,24 @@
             <div class="row g-3">
                 <div class="col-md-5">
                     <label class="form-label">Nombre del box</label>
-                    <input type="text" name="name" class="form-control" value="Box 1">
+                    <input type="text" name="name" class="form-control" value="<?php echo e($box['name'] ?? ''); ?>">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Capacidad</label>
-                    <input type="text" name="capacity" class="form-control" value="2 pacientes">
+                    <input type="text" name="capacity" class="form-control" value="<?php echo e($box['capacity'] ?? ''); ?>">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Estado</label>
+                    <?php $currentStatus = $box['status'] ?? 'Disponible'; ?>
                     <select name="status" class="form-select">
-                        <option selected>Disponible</option>
-                        <option>En uso</option>
-                        <option>En mantenimiento</option>
+                        <option value="Disponible" <?php echo $currentStatus === 'Disponible' ? 'selected' : ''; ?>>Disponible</option>
+                        <option value="En uso" <?php echo $currentStatus === 'En uso' ? 'selected' : ''; ?>>En uso</option>
+                        <option value="En mantenimiento" <?php echo $currentStatus === 'En mantenimiento' ? 'selected' : ''; ?>>En mantenimiento</option>
                     </select>
                 </div>
                 <div class="col-12">
                     <label class="form-label">Equipamiento</label>
-                    <textarea name="equipment" class="form-control" rows="3">Camilla, electroestimulación</textarea>
+                    <textarea name="equipment" class="form-control" rows="3"><?php echo e($box['equipment'] ?? ''); ?></textarea>
                 </div>
             </div>
             <div class="mt-4 d-flex gap-2 justify-content-end">
