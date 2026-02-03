@@ -36,6 +36,11 @@
                                 <td class="text-end">
                                     <a href="index.php?route=patients/show&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-primary">Ver</a>
                                     <a href="index.php?route=patients/edit&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                    <form method="post" action="index.php?route=patients/delete" class="d-inline" onsubmit="return confirm('¿Eliminar este paciente?');">
+                                        <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                        <input type="hidden" name="id" value="<?php echo e($patient['id']); ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

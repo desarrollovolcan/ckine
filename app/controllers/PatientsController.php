@@ -139,4 +139,21 @@ class PatientsController extends Controller
             'patient' => $patient,
         ]);
     }
+
+    public function delete(): void
+    {
+        $this->requireLogin();
+        verify_csrf();
+        $companyId = $this->requireCompany();
+        $patientId = (int)($_POST['id'] ?? 0);
+        $patient = $this->patients->findForCompany($patientId, $companyId);
+        if (!$patient) {
+            flash('error', 'Paciente no encontrado.');
+            $this->redirect('index.php?route=patients');
+        }
+        $this->patients->markDeleted($patientId, $companyId);
+        audit($this->db, Auth::user()['id'], 'delete', 'patients', $patientId);
+        flash('success', 'Paciente eliminado correctamente.');
+        $this->redirect('index.php?route=patients');
+    }
 }

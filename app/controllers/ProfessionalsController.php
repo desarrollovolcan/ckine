@@ -63,4 +63,13 @@ class ProfessionalsController extends Controller
             'professionalId' => $professionalId,
         ]);
     }
+
+    public function delete(): void
+    {
+        $this->requireLogin();
+        verify_csrf();
+        $professionalId = (int)($_POST['id'] ?? 0);
+        flash('success', "Profesional {$professionalId} eliminado correctamente (demo).");
+        $this->redirect('index.php?route=professionals');
+    }
 }

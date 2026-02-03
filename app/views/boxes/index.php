@@ -30,6 +30,11 @@
                             <td class="text-end">
                                 <a href="index.php?route=boxes/show&id=<?php echo e($box['id']); ?>" class="btn btn-sm btn-outline-primary">Ver</a>
                                 <a href="index.php?route=boxes/edit&id=<?php echo e($box['id']); ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <form method="post" action="index.php?route=boxes/delete" class="d-inline" onsubmit="return confirm('¿Eliminar este box?');">
+                                    <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                                    <input type="hidden" name="id" value="<?php echo e($box['id']); ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
