@@ -1,14 +1,12 @@
 <?php include __DIR__ . '/../../../partials/html.php'; ?>
 
 <head>
-    <?php $title = $title ?? 'Centro Kinésico'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
+    <?php $title = $title ?? 'Portal'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
     <?php include __DIR__ . '/../../../partials/head-css.php'; ?>
 </head>
 
 <body>
     <div class="wrapper">
-        <?php include __DIR__ . '/../partials/menu.php'; ?>
-
         <div class="content-page">
             <div class="container-fluid">
                 <?php $pageTitle = $pageTitle ?? $title ?? ''; include __DIR__ . '/../../../partials/page-title.php'; ?>
