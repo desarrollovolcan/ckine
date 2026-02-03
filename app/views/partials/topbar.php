@@ -148,7 +148,7 @@ $portalLoginUrl = $portalBaseUrl !== '' ? $portalBaseUrl . '/' . $portalLoginPat
                             <i class="ti ti-bell me-2"></i> Notificaciones
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="index.php?route=logout" class="dropdown-item text-danger">
+                        <a href="index.php?route=auth/logout" class="dropdown-item text-danger">
                             <i class="ti ti-logout me-2"></i> Salir
                         </a>
                     </div>

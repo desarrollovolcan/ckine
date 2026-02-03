@@ -577,6 +577,62 @@ function permission_catalog(): array
             'view_key' => 'dashboard_view',
             'edit_key' => null,
         ],
+        'patients' => [
+            'label' => 'Pacientes',
+            'routes' => ['patients'],
+            'legacy_key' => 'patients',
+            'view_key' => 'patients_view',
+            'edit_key' => 'patients_edit',
+        ],
+        'professionals' => [
+            'label' => 'Profesionales',
+            'routes' => ['professionals'],
+            'legacy_key' => 'professionals',
+            'view_key' => 'professionals_view',
+            'edit_key' => 'professionals_edit',
+        ],
+        'boxes' => [
+            'label' => 'Box y salas',
+            'routes' => ['boxes'],
+            'legacy_key' => 'boxes',
+            'view_key' => 'boxes_view',
+            'edit_key' => 'boxes_edit',
+        ],
+        'appointments' => [
+            'label' => 'Agenda y citas',
+            'routes' => ['appointments', 'appointments/calendar'],
+            'legacy_key' => 'appointments',
+            'view_key' => 'appointments_view',
+            'edit_key' => 'appointments_edit',
+        ],
+        'patient_portal' => [
+            'label' => 'Portal de pacientes',
+            'routes' => ['patient-portal'],
+            'legacy_key' => 'patient_portal',
+            'view_key' => 'patient_portal_view',
+            'edit_key' => null,
+        ],
+        'clinical_records' => [
+            'label' => 'Historial clínico',
+            'routes' => ['clinical'],
+            'legacy_key' => 'clinical_records',
+            'view_key' => 'clinical_records_view',
+            'edit_key' => 'clinical_records_edit',
+        ],
+        'reports' => [
+            'label' => 'Reportes',
+            'routes' => ['reports'],
+            'legacy_key' => 'reports',
+            'view_key' => 'reports_view',
+            'edit_key' => null,
+        ],
+        'audit' => [
+            'label' => 'Auditoría y logs',
+            'routes' => ['audit'],
+            'legacy_key' => 'audit',
+            'view_key' => 'audit_view',
+            'edit_key' => null,
+        ],
         'crm' => [
             'label' => 'CRM Comercial',
             'routes' => ['crm'],
@@ -896,6 +952,76 @@ function permission_catalog(): array
     ];
 }
 
+function normalize_role_key(string $role): string
+{
+    $normalized = trim(mb_strtolower($role));
+    $normalized = strtr($normalized, [
+        'á' => 'a',
+        'é' => 'e',
+        'í' => 'i',
+        'ó' => 'o',
+        'ú' => 'u',
+        'ñ' => 'n',
+        'ä' => 'a',
+        'ë' => 'e',
+        'ï' => 'i',
+        'ö' => 'o',
+        'ü' => 'u',
+    ]);
+    return preg_replace('/\s+/', '', $normalized) ?? $normalized;
+}
+
+function role_default_permissions(string $role): array
+{
+    $roleKey = normalize_role_key($role);
+    $defaults = [
+        'recepcion' => [
+            'patients_view',
+            'patients_edit',
+            'appointments_view',
+            'appointments_edit',
+            'patient_portal_view',
+            'reports_view',
+        ],
+        'recepcionista' => [
+            'patients_view',
+            'patients_edit',
+            'appointments_view',
+            'appointments_edit',
+            'patient_portal_view',
+            'reports_view',
+        ],
+        'reception' => [
+            'patients_view',
+            'patients_edit',
+            'appointments_view',
+            'appointments_edit',
+            'patient_portal_view',
+            'reports_view',
+        ],
+        'kinesiologo' => [
+            'appointments_view',
+            'patients_view',
+            'clinical_records_view',
+            'clinical_records_edit',
+        ],
+        'kinesiologa' => [
+            'appointments_view',
+            'patients_view',
+            'clinical_records_view',
+            'clinical_records_edit',
+        ],
+        'kinesiology' => [
+            'appointments_view',
+            'patients_view',
+            'clinical_records_view',
+            'clinical_records_edit',
+        ],
+    ];
+
+    return $defaults[$roleKey] ?? [];
+}
+
 function flash(string $type, string $message): void
 {
     if (!isset($_SESSION['flash'])) {
@@ -1006,10 +1132,14 @@ function can_access_route(Database $db, string $route, ?array $user): bool
         $roleRow = $db->fetch('SELECT id FROM roles WHERE name = :name', ['name' => $user['role']]);
         $roleId = (int)($roleRow['id'] ?? 0);
     }
-    if ($roleId === 0) {
+    $permissions = [];
+    if ($roleId !== 0) {
+        $permissions = role_permissions($db, $roleId);
+    }
+    $permissions = array_values(array_unique(array_merge($permissions, role_default_permissions($user['role'] ?? ''))));
+    if ($permissions === []) {
         return false;
     }
-    $permissions = role_permissions($db, $roleId);
     if (in_array($key, $permissions, true)) {
         return true;
     }
