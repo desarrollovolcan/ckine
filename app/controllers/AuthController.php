@@ -4,6 +4,9 @@ class AuthController extends Controller
 {
     public function showLogin(): void
     {
+        if (Auth::check()) {
+            $this->redirect('index.php?route=dashboard');
+        }
         $companies = (new CompaniesModel($this->db))->active();
         $this->renderPublic('auth/login', [
             'title' => 'Acceso Administrador',
@@ -23,13 +26,13 @@ class AuthController extends Controller
 
         if ($companyId === 0) {
             $_SESSION['error'] = 'Selecciona una empresa.';
-            $this->redirect('login.php');
+            $this->redirect('index.php?route=auth/login');
         }
 
         $company = $this->db->fetch('SELECT * FROM companies WHERE id = :id', ['id' => $companyId]);
         if (!$company) {
             $_SESSION['error'] = 'Empresa no encontrada.';
-            $this->redirect('login.php');
+            $this->redirect('index.php?route=auth/login');
         }
 
         $user = $this->db->fetch('SELECT users.*, roles.name as role FROM users JOIN roles ON users.role_id = roles.id WHERE users.email = :email AND users.company_id = :company_id AND users.deleted_at IS NULL', [
@@ -45,7 +48,7 @@ class AuthController extends Controller
 
         if (!$user || !password_verify($password, $user['password'])) {
             $_SESSION['error'] = 'Credenciales inválidas.';
-            $this->redirect('login.php');
+            $this->redirect('index.php?route=auth/login');
         }
 
         Auth::login([
@@ -58,13 +61,13 @@ class AuthController extends Controller
             'company_id' => $company['id'],
             'company_name' => $company['name'],
         ]);
-        $this->redirect('index.php');
+        $this->redirect('index.php?route=dashboard');
     }
 
     public function logout(): void
     {
         Auth::logout();
-        $this->redirect('login.php');
+        $this->redirect('index.php?route=auth/login');
     }
 
     public function switchCompany(): void
