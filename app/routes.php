@@ -30,6 +30,8 @@ return [
     'appointments/calendar' => ['AppointmentsController', 'calendar'],
     'appointments/create' => ['AppointmentsController', 'create'],
     'appointments/store' => ['AppointmentsController', 'store'],
+    'appointments/edit' => ['AppointmentsController', 'edit'],
+    'appointments/update' => ['AppointmentsController', 'update'],
     'appointments/delete' => ['AppointmentsController', 'delete'],
     'patient-portal' => ['PatientPortalController', 'index'],
     'patient-portal/update' => ['PatientPortalController', 'update'],
