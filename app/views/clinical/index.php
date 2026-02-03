@@ -19,18 +19,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($records as $record): ?>
+                    <?php if (!empty($records)): ?>
+                        <?php foreach ($records as $record): ?>
+                            <tr>
+                                <td><?php echo e($record['patient']); ?></td>
+                                <td><?php echo e($record['last_visit'] ? format_date($record['last_visit']) : 'Sin registros'); ?></td>
+                                <td><?php echo e($record['professional']); ?></td>
+                                <td><span class="badge bg-light text-dark"><?php echo e($record['status']); ?></span></td>
+                                <td class="text-end">
+                                    <a href="index.php?route=clinical/show&patient_id=<?php echo e($record['id']); ?>" class="btn btn-sm btn-outline-primary">Ver ficha</a>
+                                    <a href="index.php?route=clinical/note&patient_id=<?php echo e($record['id']); ?>" class="btn btn-sm btn-outline-secondary">Nueva nota</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
                         <tr>
-                            <td><?php echo e($record['patient']); ?></td>
-                            <td><?php echo e(format_date($record['last_visit'])); ?></td>
-                            <td><?php echo e($record['professional']); ?></td>
-                            <td><span class="badge bg-light text-dark"><?php echo e($record['status']); ?></span></td>
-                            <td class="text-end">
-                                <a href="index.php?route=clinical/show&patient_id=<?php echo e($record['id']); ?>" class="btn btn-sm btn-outline-primary">Ver ficha</a>
-                                <a href="index.php?route=clinical/note&patient_id=<?php echo e($record['id']); ?>" class="btn btn-sm btn-outline-secondary">Nueva nota</a>
-                            </td>
+                            <td colspan="5" class="text-center text-muted">Sin pacientes registrados.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

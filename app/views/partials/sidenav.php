@@ -807,7 +807,7 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                     </li>
                 <?php endif; ?>
             <?php endif; ?>
-            <?php if ($canAccessAny(['users_view', 'roles_view', 'users_companies_view', 'users_permissions_view', 'companies_view', 'settings_view', 'email_config_view', 'online_payments_config_view', 'system_services_view', 'service_types_view', 'chile_regions_view', 'hr_maintainers_view'])): ?>
+            <?php if ($canAccessAny(['users_view', 'roles_view', 'users_companies_view', 'users_permissions_view', 'settings_view'])): ?>
                 <li class="side-nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarMaintainers" aria-expanded="false" aria-controls="sidebarMaintainers" class="side-nav-link">
                         <span class="menu-icon"><i data-lucide="database"></i></span>
@@ -859,91 +859,11 @@ $logoSmallBlack = $companySettings['logo_black'] ?? 'assets/images/logo-sm.png';
                                     </div>
                                 </li>
                             <?php endif; ?>
-                            <?php if ($hasPermission('companies_view')): ?>
-                                <li class="side-nav-item">
-                                    <a href="index.php?route=companies" class="side-nav-link">
-                                        <span class="menu-text">Empresas</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
                             <?php if ($hasCompany && $hasPermission('settings_view')): ?>
                                 <li class="side-nav-item">
                                     <a href="index.php?route=settings" class="side-nav-link">
                                         <span class="menu-text">Configuraciones</span>
                                     </a>
-                                </li>
-                                <li class="side-nav-item">
-                                    <a href="index.php?route=maintainers/form-audit" class="side-nav-link">
-                                        <span class="menu-text">Auditoría formularios</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <?php if ($hasCompany && $hasPermission('email_config_view')): ?>
-                                <li class="side-nav-item">
-                                    <a href="index.php?route=maintainers/email-config" class="side-nav-link">
-                                        <span class="menu-text">Configuración de correo</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <?php if ($hasCompany && $hasPermission('online_payments_config_view')): ?>
-                                <li class="side-nav-item">
-                                    <a href="index.php?route=maintainers/online-payments" class="side-nav-link">
-                                        <span class="menu-text">Pagos en línea</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <?php if ($hasPermission('chile_regions_view')): ?>
-                                <li class="side-nav-item">
-                                    <a href="index.php?route=maintainers/chile-regions" class="side-nav-link">
-                                        <span class="menu-text">Regiones</span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-                            <?php if ($hasCompany && $hasPermission('hr_maintainers_view')): ?>
-                                <li class="side-nav-item">
-                                    <a data-bs-toggle="collapse" href="#sidebarMaintainersHr" aria-expanded="false" aria-controls="sidebarMaintainersHr" class="side-nav-link">
-                                        <span class="menu-text">Recursos Humanos</span>
-                                        <span class="menu-arrow"></span>
-                                    </a>
-                                    <div class="collapse" id="sidebarMaintainersHr">
-                                        <ul class="sub-menu">
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-departments" class="side-nav-link">
-                                                    <span class="menu-text">Departamentos</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-positions" class="side-nav-link">
-                                                    <span class="menu-text">Cargos</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-contract-types" class="side-nav-link">
-                                                    <span class="menu-text">Tipos de contrato</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-work-schedules" class="side-nav-link">
-                                                    <span class="menu-text">Jornadas</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-health-providers" class="side-nav-link">
-                                                    <span class="menu-text">Instituciones de salud</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-pension-funds" class="side-nav-link">
-                                                    <span class="menu-text">AFP</span>
-                                                </a>
-                                            </li>
-                                            <li class="side-nav-item">
-                                                <a href="index.php?route=maintainers/hr-payroll-items" class="side-nav-link">
-                                                    <span class="menu-text">Ítems remuneración</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </li>
                             <?php endif; ?>
                         </ul>

@@ -2,14 +2,29 @@
 
 class PatientsController extends Controller
 {
+    private PatientsModel $patients;
+
+    public function __construct(array $config, Database $db)
+    {
+        parent::__construct($config, $db);
+        $this->patients = new PatientsModel($db);
+    }
+
+    private function requireCompany(): int
+    {
+        $companyId = current_company_id();
+        if (!$companyId) {
+            flash('error', 'Selecciona una empresa.');
+            $this->redirect('index.php?route=auth/switch-company');
+        }
+        return (int)$companyId;
+    }
+
     public function index(): void
     {
         $this->requireLogin();
-        $patients = [
-            ['id' => 1001, 'name' => 'María López', 'rut' => '12.345.678-9', 'birthdate' => '1990-04-12', 'phone' => '+56 9 1234 5678', 'email' => 'maria.lopez@example.com', 'status' => 'Activo'],
-            ['id' => 1002, 'name' => 'Carlos Rivas', 'rut' => '9.876.543-2', 'birthdate' => '1985-11-30', 'phone' => '+56 9 9876 1234', 'email' => 'carlos.rivas@example.com', 'status' => 'En seguimiento'],
-            ['id' => 1003, 'name' => 'Josefina Araya', 'rut' => '18.223.445-1', 'birthdate' => '2000-02-08', 'phone' => '+56 9 1111 2233', 'email' => 'josefina.araya@example.com', 'status' => 'Nuevo'],
-        ];
+        $companyId = $this->requireCompany();
+        $patients = $this->patients->active($companyId);
         $this->render('patients/index', [
             'title' => 'Pacientes',
             'subtitle' => 'Clínica',
@@ -20,6 +35,7 @@ class PatientsController extends Controller
     public function create(): void
     {
         $this->requireLogin();
+        $this->requireCompany();
         $this->render('patients/create', [
             'title' => 'Nuevo paciente',
             'subtitle' => 'Pacientes',
@@ -30,18 +46,46 @@ class PatientsController extends Controller
     {
         $this->requireLogin();
         verify_csrf();
-        flash('success', 'Paciente creado correctamente (demo).');
+        $companyId = $this->requireCompany();
+        $name = trim($_POST['name'] ?? '');
+        if ($name === '') {
+            flash('error', 'El nombre es obligatorio.');
+            $this->redirect('index.php?route=patients/create');
+        }
+        $birthdate = trim($_POST['birthdate'] ?? '');
+        $birthdate = $birthdate !== '' ? $birthdate : null;
+        $this->patients->create([
+            'company_id' => $companyId,
+            'name' => $name,
+            'rut' => trim($_POST['rut'] ?? ''),
+            'birthdate' => $birthdate,
+            'email' => trim($_POST['email'] ?? ''),
+            'phone' => trim($_POST['phone'] ?? ''),
+            'status' => trim($_POST['status'] ?? 'Nuevo'),
+            'notes' => trim($_POST['notes'] ?? ''),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        audit($this->db, Auth::user()['id'], 'create', 'patients');
+        flash('success', 'Paciente creado correctamente.');
         $this->redirect('index.php?route=patients');
     }
 
     public function edit(): void
     {
         $this->requireLogin();
+        $companyId = $this->requireCompany();
         $patientId = (int)($_GET['id'] ?? 0);
+        $patient = $this->patients->findForCompany($patientId, $companyId);
+        if (!$patient) {
+            flash('error', 'Paciente no encontrado.');
+            $this->redirect('index.php?route=patients');
+        }
         $this->render('patients/edit', [
             'title' => 'Editar paciente',
             'subtitle' => 'Pacientes',
             'patientId' => $patientId,
+            'patient' => $patient,
         ]);
     }
 
@@ -49,18 +93,50 @@ class PatientsController extends Controller
     {
         $this->requireLogin();
         verify_csrf();
-        flash('success', 'Paciente actualizado correctamente (demo).');
+        $companyId = $this->requireCompany();
+        $patientId = (int)($_GET['id'] ?? 0);
+        $patient = $this->patients->findForCompany($patientId, $companyId);
+        if (!$patient) {
+            flash('error', 'Paciente no encontrado.');
+            $this->redirect('index.php?route=patients');
+        }
+        $name = trim($_POST['name'] ?? '');
+        if ($name === '') {
+            flash('error', 'El nombre es obligatorio.');
+            $this->redirect('index.php?route=patients/edit&id=' . $patientId);
+        }
+        $birthdate = trim($_POST['birthdate'] ?? '');
+        $birthdate = $birthdate !== '' ? $birthdate : null;
+        $this->patients->update($patientId, [
+            'name' => $name,
+            'rut' => trim($_POST['rut'] ?? ''),
+            'birthdate' => $birthdate,
+            'email' => trim($_POST['email'] ?? ''),
+            'phone' => trim($_POST['phone'] ?? ''),
+            'status' => trim($_POST['status'] ?? 'Activo'),
+            'notes' => trim($_POST['notes'] ?? ''),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        audit($this->db, Auth::user()['id'], 'update', 'patients', $patientId);
+        flash('success', 'Paciente actualizado correctamente.');
         $this->redirect('index.php?route=patients');
     }
 
     public function show(): void
     {
         $this->requireLogin();
+        $companyId = $this->requireCompany();
         $patientId = (int)($_GET['id'] ?? 0);
+        $patient = $this->patients->findForCompany($patientId, $companyId);
+        if (!$patient) {
+            flash('error', 'Paciente no encontrado.');
+            $this->redirect('index.php?route=patients');
+        }
         $this->render('patients/show', [
             'title' => 'Ficha del paciente',
             'subtitle' => 'Pacientes',
             'patientId' => $patientId,
+            'patient' => $patient,
         ]);
     }
 }

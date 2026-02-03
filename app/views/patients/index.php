@@ -21,23 +21,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($patients as $patient): ?>
+                    <?php if (!empty($patients)): ?>
+                        <?php foreach ($patients as $patient): ?>
+                            <tr>
+                                <td><?php echo e($patient['id']); ?></td>
+                                <td><?php echo e($patient['name']); ?></td>
+                                <td><?php echo e($patient['rut']); ?></td>
+                                <td><?php echo e(format_date($patient['birthdate'])); ?></td>
+                                <td>
+                                    <div><?php echo e($patient['phone']); ?></div>
+                                    <small class="text-muted"><?php echo e($patient['email']); ?></small>
+                                </td>
+                                <td><span class="badge bg-light text-dark"><?php echo e($patient['status']); ?></span></td>
+                                <td class="text-end">
+                                    <a href="index.php?route=patients/show&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-primary">Ver</a>
+                                    <a href="index.php?route=patients/edit&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
                         <tr>
-                            <td><?php echo e($patient['id']); ?></td>
-                            <td><?php echo e($patient['name']); ?></td>
-                            <td><?php echo e($patient['rut']); ?></td>
-                            <td><?php echo e(format_date($patient['birthdate'])); ?></td>
-                            <td>
-                                <div><?php echo e($patient['phone']); ?></div>
-                                <small class="text-muted"><?php echo e($patient['email']); ?></small>
-                            </td>
-                            <td><span class="badge bg-light text-dark"><?php echo e($patient['status']); ?></span></td>
-                            <td class="text-end">
-                                <a href="index.php?route=patients/show&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-primary">Ver</a>
-                                <a href="index.php?route=patients/edit&id=<?php echo e($patient['id']); ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
-                            </td>
+                            <td colspan="7" class="text-center text-muted">No hay pacientes registrados.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
