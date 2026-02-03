@@ -72,24 +72,24 @@ $theme-saas-colors: (
 
         // Background Light left-sidebar
         &[data-menu-color="light"] {
-            --#{$prefix}sidenav-bg:                       #{$white};
-            --#{$prefix}sidenav-border-color:             #{$white};
+            --#{$prefix}sidenav-bg:                       #f3fbf8;
+            --#{$prefix}sidenav-border-color:             #d6efe8;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
-            --#{$prefix}sidenav-item-hover-color:         #6366f1;
-            --#{$prefix}sidenav-item-hover-bg:          #f4f0ff;
-            --#{$prefix}sidenav-item-active-color:        #6366f1;
-            --#{$prefix}sidenav-item-active-bg:         #f4f0ff;
+            --#{$prefix}sidenav-item-hover-color:         #{$primary};
+            --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
+            --#{$prefix}sidenav-item-active-color:        #{$primary};
+            --#{$prefix}sidenav-item-active-bg:         #{$primary-bg-subtle};
         }
 
         // Background Gray left-sidebar
         &[data-menu-color="gray"] {
-            --#{$prefix}sidenav-bg:                       #f1f2f7;
-            --#{$prefix}sidenav-border-color:             #e7e9eb;
+            --#{$prefix}sidenav-bg:                       #eaf6f2;
+            --#{$prefix}sidenav-border-color:             #d6efe8;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
-            --#{$prefix}sidenav-item-hover-color:         #6366f1;
-            --#{$prefix}sidenav-item-hover-bg:          #f4f0ff;
-            --#{$prefix}sidenav-item-active-color:        #212b29;
-            --#{$prefix}sidenav-item-active-bg:         #e8e8ed;
+            --#{$prefix}sidenav-item-hover-color:         #{$primary};
+            --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
+            --#{$prefix}sidenav-item-active-color:        #{$primary};
+            --#{$prefix}sidenav-item-active-bg:         #{$primary-bg-subtle};
         }
 
         // Dark Left Sidebar
@@ -139,20 +139,20 @@ $theme-saas-colors: (
 
         // Light Topbar
         &[data-topbar-color="light"] {
-            --#{$prefix}topbar-bg:                      #ffffff;
+            --#{$prefix}topbar-bg:                      #f3fbf8;
             --#{$prefix}topbar-item-color:                #{$gray-700};
-            --#{$prefix}topbar-item-hover-color:          #6366f1;
+            --#{$prefix}topbar-item-hover-color:          #{$primary};
             --#{$prefix}topbar-search-bg:                 transparent;
             --#{$prefix}topbar-search-border:           #e7e9eb;
         }
 
         // Gray Topbar
         &[data-topbar-color="gray"] {
-            --#{$prefix}topbar-bg:                      #f1f2f7;
+            --#{$prefix}topbar-bg:                      #eaf6f2;
             --#{$prefix}topbar-item-color:                #{$gray-700};
-            --#{$prefix}topbar-item-hover-color:          #6366f1;
-            --#{$prefix}topbar-search-bg:               #e8e9ef;
-            --#{$prefix}topbar-search-border:           #e8e9ef;
+            --#{$prefix}topbar-item-hover-color:          #{$primary};
+            --#{$prefix}topbar-search-bg:               #dff2ed;
+            --#{$prefix}topbar-search-border:           #dff2ed;
         }
 
         // Dark Topbar
