@@ -30,6 +30,42 @@ class ProfessionalsController extends Controller
     {
         $this->requireLogin();
         verify_csrf();
+        $name = trim($_POST['name'] ?? '');
+        $rut = normalize_rut($_POST['rut'] ?? '');
+        $specialty = trim($_POST['specialty'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $licenseNumber = trim($_POST['license_number'] ?? '');
+        $schedule = trim($_POST['schedule'] ?? '');
+        $modality = trim($_POST['modality'] ?? '');
+        $status = trim($_POST['status'] ?? 'Activo');
+        $allowedModalities = ['Presencial', 'Mixta', 'Telemedicina'];
+        $allowedStatuses = ['Activo', 'En pausa'];
+
+        if (!Validator::required($name) || !Validator::required($rut) || !Validator::required($specialty) || !Validator::required($email)) {
+            flash('error', 'Completa los campos obligatorios para registrar al profesional.');
+            $this->redirect('index.php?route=professionals/create');
+        }
+        if (!Validator::rut($rut)) {
+            flash('error', 'El RUT ingresado no es válido.');
+            $this->redirect('index.php?route=professionals/create');
+        }
+        if (!Validator::email($email)) {
+            flash('error', 'El correo ingresado no es válido.');
+            $this->redirect('index.php?route=professionals/create');
+        }
+        if (!Validator::required($phone) || !Validator::required($licenseNumber) || !Validator::required($schedule) || !Validator::required($modality)) {
+            flash('error', 'Completa teléfono, registro profesional, modalidad y horario.');
+            $this->redirect('index.php?route=professionals/create');
+        }
+        if (!in_array($modality, $allowedModalities, true)) {
+            flash('error', 'Selecciona una modalidad válida.');
+            $this->redirect('index.php?route=professionals/create');
+        }
+        if (!in_array($status, $allowedStatuses, true)) {
+            flash('error', 'Selecciona un estado válido.');
+            $this->redirect('index.php?route=professionals/create');
+        }
         flash('success', 'Profesional creado correctamente (demo).');
         $this->redirect('index.php?route=professionals');
     }
@@ -49,6 +85,43 @@ class ProfessionalsController extends Controller
     {
         $this->requireLogin();
         verify_csrf();
+        $professionalId = (int)($_GET['id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+        $rut = normalize_rut($_POST['rut'] ?? '');
+        $specialty = trim($_POST['specialty'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $licenseNumber = trim($_POST['license_number'] ?? '');
+        $schedule = trim($_POST['schedule'] ?? '');
+        $modality = trim($_POST['modality'] ?? '');
+        $status = trim($_POST['status'] ?? 'Activo');
+        $allowedModalities = ['Presencial', 'Mixta', 'Telemedicina'];
+        $allowedStatuses = ['Activo', 'En pausa'];
+
+        if (!Validator::required($name) || !Validator::required($rut) || !Validator::required($specialty) || !Validator::required($email)) {
+            flash('error', 'Completa los campos obligatorios para actualizar al profesional.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
+        if (!Validator::rut($rut)) {
+            flash('error', 'El RUT ingresado no es válido.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
+        if (!Validator::email($email)) {
+            flash('error', 'El correo ingresado no es válido.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
+        if (!Validator::required($phone) || !Validator::required($licenseNumber) || !Validator::required($schedule) || !Validator::required($modality)) {
+            flash('error', 'Completa teléfono, registro profesional, modalidad y horario.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
+        if (!in_array($modality, $allowedModalities, true)) {
+            flash('error', 'Selecciona una modalidad válida.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
+        if (!in_array($status, $allowedStatuses, true)) {
+            flash('error', 'Selecciona un estado válido.');
+            $this->redirect('index.php?route=professionals/edit&id=' . $professionalId);
+        }
         flash('success', 'Profesional actualizado correctamente (demo).');
         $this->redirect('index.php?route=professionals');
     }
