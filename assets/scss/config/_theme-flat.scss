@@ -69,8 +69,8 @@ $theme-flat-colors: (
 
         // Background Light left-sidebar
         &[data-menu-color="light"] {
-            --#{$prefix}sidenav-bg:                       #{$white};
-            --#{$prefix}sidenav-border-color:             #edf2f9;
+            --#{$prefix}sidenav-bg:                       #f3fbf8;
+            --#{$prefix}sidenav-border-color:             #d6efe8;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
             --#{$prefix}sidenav-item-hover-color:         #{$primary};
             --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
@@ -80,8 +80,8 @@ $theme-flat-colors: (
 
         // Background Gray left-sidebar
         &[data-menu-color="gray"] {
-            --#{$prefix}sidenav-bg:                       #f1f2f7;
-            --#{$prefix}sidenav-border-color:             #e7e9eb;
+            --#{$prefix}sidenav-bg:                       #eaf6f2;
+            --#{$prefix}sidenav-border-color:             #d6efe8;
             --#{$prefix}sidenav-item-color:               #{$gray-700};
             --#{$prefix}sidenav-item-hover-color:         #{$primary};
             --#{$prefix}sidenav-item-hover-bg:          #{$primary-bg-subtle};
@@ -137,7 +137,7 @@ $theme-flat-colors: (
 
         // Light Topbar
         &[data-topbar-color="light"] {
-            --#{$prefix}topbar-bg:                      #ffffff;
+            --#{$prefix}topbar-bg:                      #f3fbf8;
             --#{$prefix}topbar-item-color:                #{$gray-700};
             --#{$prefix}topbar-item-hover-color:          #{$primary};
             --#{$prefix}topbar-search-bg:                 transparent;
@@ -146,11 +146,11 @@ $theme-flat-colors: (
 
         // Gray Topbar
         &[data-topbar-color="gray"] {
-            --#{$prefix}topbar-bg:                      #f1f2f7;
+            --#{$prefix}topbar-bg:                      #eaf6f2;
             --#{$prefix}topbar-item-color:                #{$gray-700};
             --#{$prefix}topbar-item-hover-color:          #{$primary};
-            --#{$prefix}topbar-search-bg:               #e8e9ef;
-            --#{$prefix}topbar-search-border:           #e8e9ef;
+            --#{$prefix}topbar-search-bg:               #dff2ed;
+            --#{$prefix}topbar-search-border:           #dff2ed;
         }
 
         // Dark Topbar

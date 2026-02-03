@@ -16,6 +16,24 @@ class AppointmentsModel extends Model
         return $this->db->fetchAll($sql, ['company_id' => $companyId]);
     }
 
+    public function byDateRange(int $companyId, string $startDate, string $endDate): array
+    {
+        $sql = "SELECT a.*, p.name AS patient_name, pr.name AS professional_name, b.name AS box_name
+                FROM {$this->table} a
+                INNER JOIN patients p ON p.id = a.patient_id AND p.company_id = a.company_id AND p.deleted_at IS NULL
+                INNER JOIN professionals pr ON pr.id = a.professional_id AND pr.company_id = a.company_id AND pr.deleted_at IS NULL
+                LEFT JOIN boxes b ON b.id = a.box_id AND b.company_id = a.company_id AND b.deleted_at IS NULL
+                WHERE a.company_id = :company_id
+                  AND a.deleted_at IS NULL
+                  AND a.appointment_date BETWEEN :start_date AND :end_date
+                ORDER BY a.appointment_date ASC, a.appointment_time ASC";
+        return $this->db->fetchAll($sql, [
+            'company_id' => $companyId,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
+    }
+
     public function findForCompany(int $id, int $companyId): ?array
     {
         return $this->db->fetch(
