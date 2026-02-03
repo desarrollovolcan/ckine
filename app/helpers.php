@@ -86,6 +86,13 @@ function base_url(): string
     return $scheme . '://' . $host . $basePath;
 }
 
+function app_path(string $path): string
+{
+    $basePath = rtrim((string)app_config('app.base_path', ''), '/');
+    $normalized = '/' . ltrim($path, '/');
+    return $basePath !== '' ? $basePath . $normalized : $normalized;
+}
+
 function currency_format_settings(): array
 {
     return app_config('currency_format', [
@@ -912,6 +919,51 @@ function consume_flash(): array
     $messages = $_SESSION['flash'] ?? [];
     unset($_SESSION['flash']);
     return $messages;
+}
+
+function audit_log_kine(Database $db, int $userId, string $action, string $entity, ?int $entityId = null, array $detail = []): void
+{
+    $db->execute(
+        'INSERT INTO audit_logs (user_id, action, entity, entity_id, detail_json, created_at) VALUES (:user_id, :action, :entity, :entity_id, :detail_json, NOW())',
+        [
+            'user_id' => $userId,
+            'action' => $action,
+            'entity' => $entity,
+            'entity_id' => $entityId,
+            'detail_json' => json_encode($detail, JSON_UNESCAPED_UNICODE),
+        ]
+    );
+}
+
+function store_attachment(array $file): array
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return ['path' => null, 'error' => 'No se pudo cargar el archivo.'];
+    }
+
+    $allowed = [
+        'application/pdf' => 'pdf',
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+    ];
+    $type = $file['type'] ?? '';
+    $extension = $allowed[$type] ?? null;
+    if ($extension === null) {
+        return ['path' => null, 'error' => 'Formato no permitido.'];
+    }
+
+    $directory = __DIR__ . '/../storage/uploads/attachments';
+    if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
+        return ['path' => null, 'error' => 'No se pudo crear el directorio de adjuntos.'];
+    }
+
+    $filename = sprintf('adjunto-%s.%s', bin2hex(random_bytes(8)), $extension);
+    $destination = $directory . '/' . $filename;
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        return ['path' => null, 'error' => 'No se pudo guardar el adjunto.'];
+    }
+
+    return ['path' => 'storage/uploads/attachments/' . $filename, 'error' => null];
 }
 
 function permission_key_for_route(string $route): ?string

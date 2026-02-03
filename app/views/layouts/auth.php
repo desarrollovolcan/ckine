@@ -1,17 +1,14 @@
 <?php include __DIR__ . '/../../../partials/html.php'; ?>
 
 <head>
-    <?php $title = $title ?? 'Centro Kinésico'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
+    <?php $title = $title ?? 'Ingreso'; include __DIR__ . '/../../../partials/title-meta.php'; ?>
     <?php include __DIR__ . '/../../../partials/head-css.php'; ?>
 </head>
 
-<body>
-    <div class="wrapper">
-        <?php include __DIR__ . '/../partials/menu.php'; ?>
-
-        <div class="content-page">
-            <div class="container-fluid">
-                <?php $pageTitle = $pageTitle ?? $title ?? ''; include __DIR__ . '/../../../partials/page-title.php'; ?>
+<body class="bg-body-secondary">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xxl-4 col-xl-5 col-lg-6">
                 <?php
                 $flashMessages = consume_flash();
                 $flashClassMap = [
@@ -24,7 +21,7 @@
                 <?php foreach ($flashMessages as $type => $messages): ?>
                     <?php $alertClass = $flashClassMap[$type] ?? 'info'; ?>
                     <?php foreach ((array)$messages as $message): ?>
-                        <div class="alert alert-<?php echo e($alertClass); ?> alert-dismissible fade show" role="alert">
+                        <div class="alert alert-<?php echo e($alertClass); ?> alert-dismissible fade show mt-4" role="alert">
                             <?php echo e($message); ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -40,7 +37,6 @@
                 }
                 ?>
             </div>
-            <?php include __DIR__ . '/../../../partials/footer.php'; ?>
         </div>
     </div>
 
